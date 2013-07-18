@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import mark_safe
 
 from .utils import open_stored_file 
