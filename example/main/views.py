@@ -2,9 +2,11 @@ from django import forms
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
+from stickyuploads.widgets import StickyUploadWidget
+
 
 class ExampleForm(forms.Form):
-    upload = forms.FileField()
+    upload = forms.FileField(widget=StickyUploadWidget)
     other = forms.BooleanField()
 
 

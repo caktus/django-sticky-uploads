@@ -15,5 +15,14 @@
         {{ form }}
         <button type="submit">Submit</button>
     </form>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#id_upload').djangoUploader({
+                "url": "{% url 'sticky-upload-default' %}"
+            });
+        });
+    </script>
 </body>
 </html>

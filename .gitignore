@@ -11,3 +11,4 @@
 *.swp
 docs/_build/*
 dist/*
+example/media/*
