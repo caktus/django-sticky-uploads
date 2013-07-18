@@ -37,5 +37,8 @@ setup(
     ],
     long_description=read_file('README.rst'),
     test_suite="runtests.runtests",
+    tests_require=(
+        'mock>=1.0.1,<1.1',
+    )
     zip_safe=False,
 )
