@@ -39,6 +39,6 @@ setup(
     test_suite="runtests.runtests",
     tests_require=(
         'mock>=1.0.1,<1.1',
-    )
+    ),
     zip_safe=False,
 )
