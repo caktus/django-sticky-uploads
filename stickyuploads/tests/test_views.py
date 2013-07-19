@@ -12,6 +12,7 @@ from django.test.utils import override_settings
 
 from ..compat import get_user_model
 from ..utils import serialize_upload
+from .base import TempFileMixin
 
 
 @override_settings(
@@ -19,7 +20,7 @@ from ..utils import serialize_upload
     MEDIA_ROOT=tempfile.gettempdir(),
     MEDIA_URL='/test-media/',
 )
-class UploadViewTestCase(TestCase):
+class UploadViewTestCase(TempFileMixin, TestCase):
     """View to handle background AJAX upload."""
 
     url_conf = 'stickyuploads.tests.urls'
@@ -29,15 +30,7 @@ class UploadViewTestCase(TestCase):
         User = get_user_model()
         self.user = User.objects.create_user(**{User.USERNAME_FIELD: 'test', 'password': 'test'})
         self.client.login(username='test', password='test')
-        self.temp_dir = tempfile.mkdtemp()
-        _, self.temp_name = tempfile.mkstemp(dir=self.temp_dir)
-        with open(self.temp_name, 'w') as f:
-            f.write('X')
         self.url = reverse('sticky-upload-default')
-
-    def tearDown(self):
-        super(UploadViewTestCase, self).tearDown()
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_upload(self):
         """Handle a new file upload."""

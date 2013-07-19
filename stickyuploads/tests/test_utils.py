@@ -11,6 +11,7 @@ from django.test import SimpleTestCase
 from django.utils import unittest
 
 from .. import utils
+from .base import TempFileMixin
 
 
 class SerializeTestCase(unittest.TestCase):
@@ -77,19 +78,8 @@ class DeserializeTestCase(SimpleTestCase):
         self.assertEqual(result, expected)
 
 
-class OpenStoredFileTestCase(SimpleTestCase):
+class OpenStoredFileTestCase(TempFileMixin, SimpleTestCase):
     """Deserialize and open file from a storage."""
-
-    def setUp(self):
-        super(OpenStoredFileTestCase, self).setUp()
-        self.temp_dir = tempfile.mkdtemp()
-        _, self.temp_name = tempfile.mkstemp(dir=self.temp_dir)
-        with open(self.temp_name, 'w') as f:
-            f.write('X')
-
-    def tearDown(self):
-        super(OpenStoredFileTestCase, self).tearDown()
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_open_file(self):
         """Restore and open file from storage."""
