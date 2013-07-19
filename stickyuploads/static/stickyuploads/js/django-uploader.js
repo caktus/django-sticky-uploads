@@ -10,7 +10,7 @@
  * BSD License
  *
 */
-;var djUp = djUp || jQuery;
+var djUp = djUp || jQuery;
 (function ($, window, document, undefined) {
     var pluginName = "djangoUploader",
         defaults = {
@@ -29,12 +29,12 @@
     function getCookie(name) {
         var cookieValue = null,
             i = 0, cookies, cookie;
-        if (document.cookie && document.cookie != "") {
+        if (document.cookie && document.cookie !== "") {
             cookies = document.cookie.split(";");
             for (i = 0; i < cookies.length; i++) {
                 cookie = $.trim(cookies[i]);
                 // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + "=")) {
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
                 }
@@ -56,12 +56,12 @@
 
         init: function () {
             this.processing = false;
-            this.options.url = this.$element.data('uploadUrl');
+            this.options.url = this.$element.data("uploadUrl");
             this.$hidden = $(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
-            this.$form = this.$element.parents('form').eq(0);
+            this.$form = this.$element.parents("form").eq(0);
             if (this.enabled()) {
                 this.$element.on("change", $.proxy(this.change, this));
-                this.$form.on("submit", $.proxy(this.submit, this));                
+                this.$form.on("submit", $.proxy(this.submit, this));
             }
         },
 
@@ -79,7 +79,7 @@
                 this.abort();
                 this.processing = $.ajax({
                     url: this.options.url,
-                    type: 'POST',
+                    type: "POST",
                     data: formData,
                     crossDomain: false,
                     beforeSend: $.proxy(this._add_csrf_header, this),
@@ -115,7 +115,7 @@
             if (response.is_valid && response.stored) {
                 this.$hidden.val(response.stored);
             } else {
-                this.$hidden.val('');
+                this.$hidden.val("");
             }
             if (this.options.success) {
                 this.options.success.apply(this, [response]);
@@ -124,7 +124,7 @@
 
         fail: function (response) {
             // Runs on a error (40X-50X) response
-            this.$hidden.val('');
+            this.$hidden.val("");
             if (this.options.failure) {
                 this.options.success.failure(this, [response]);
             }
@@ -136,7 +136,7 @@
             this.abort();
             if (this.$hidden.val()) {
                 // Don't submit the file since its already on the server
-                this.$element.prop('disabled', true);
+                this.$element.prop("disabled", true);
             }
         },
 
@@ -180,7 +180,7 @@
 
     $(document).ready(function () {
         // Auto-bind file inputs with data-upload-url attributes
-        $(':input[type=file][data-upload-url]').djangoUploader();
+        $(":input[type=file][data-upload-url]").djangoUploader();
     });
 
 })(djUp, window, document);

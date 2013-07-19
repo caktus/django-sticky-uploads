@@ -9,3 +9,9 @@ build-js:
 	@cat ${STATIC_DIR}/js/jquery.bundle.js ${STATIC_DIR}/js/django-uploader.js > ${STATIC_DIR}/js/django-uploader.bundle.js
 	uglifyjs ${STATIC_DIR}/js/django-uploader.bundle.js > ${STATIC_DIR}/js/django-uploader.bundle.min.js
 	uglifyjs ${STATIC_DIR}/js/django-uploader.js > ${STATIC_DIR}/js/django-uploader.min.js
+
+
+lint-js:
+	# Check JS for any problems
+	# Requires jshint
+	jshint ${STATIC_DIR}/js/django-uploader.js
