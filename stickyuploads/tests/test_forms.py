@@ -3,19 +3,11 @@ from __future__ import unicode_literals
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import unittest
 
-from mock import Mock, patch
+from mock import patch
 
 from ..forms import UploadForm
 from ..utils import serialize_upload
-
-
-class MockStorage(Mock):
-
-    def save(self, name, upload):
-        return name
-
-    def url(self, name):
-        return '/uploads/{0}'.format(name)
+from .base import MockStorage
 
 
 class UploadFormTestCase(unittest.TestCase):

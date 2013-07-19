@@ -3,6 +3,23 @@
 import shutil
 import tempfile
 
+from mock import Mock
+
+
+class MockStorage(Mock):
+
+    def save(self, name, upload):
+        return name
+
+    def url(self, name):
+        return '/uploads/{0}'.format(name)
+
+    def get_valid_name(self, name):
+        return name
+
+
+mockstorage = MockStorage()
+
 
 class TempFileMixin(object):
 

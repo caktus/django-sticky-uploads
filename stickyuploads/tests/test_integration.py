@@ -2,13 +2,15 @@
 from __future__ import unicode_literals
 
 from django import forms
+
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, SimpleTestCase
 
 from ..utils import serialize_upload
 from ..widgets import StickyUploadWidget
-from .base import TempFileMixin
+from . import Example
+from .base import TempFileMixin, mockstorage
 
 
 class TestForm(forms.Form):
@@ -16,14 +18,17 @@ class TestForm(forms.Form):
     upload = forms.FileField(widget=StickyUploadWidget)
 
 
-class FormIntegrationTestCase(TempFileMixin, SimpleTestCase):
-    """Using StickyUploadWidget in a Form class."""
+class FormIntegrationMixin(object):
+    """Tests for form compatibility."""
+
+    form_class = None
+    url_conf = 'stickyuploads.tests.urls'
 
     def test_valid_from_files(self):
         """Fallback functionality to get file from passed FILES."""
         data = {'name': 'foo'}
         files = {'upload': SimpleUploadedFile('something.txt', b'content')}
-        form = TestForm(data=data, files=files)
+        form = self.form_class(data=data, files=files)
         self.assertTrue(form.is_valid())
 
     def test_valid_from_post(self):
@@ -32,7 +37,7 @@ class FormIntegrationTestCase(TempFileMixin, SimpleTestCase):
             storage = FileSystemStorage()
             stored = serialize_upload(self.temp_name, storage)
             data = {'name': 'foo', '_upload': stored}
-            form = TestForm(data=data, files={})
+            form = self.form_class(data=data, files={})
             self.assertTrue(form.is_valid())
 
     def test_keep_value_on_failure(self):
@@ -41,7 +46,40 @@ class FormIntegrationTestCase(TempFileMixin, SimpleTestCase):
             storage = FileSystemStorage()
             stored = serialize_upload(self.temp_name, storage)
             data = {'name': '', '_upload': stored}
-            form = TestForm(data=data, files={})
+            form = self.form_class(data=data, files={})
             self.assertFalse(form.is_valid())
             expected = 'value="{0}"'.format(stored)
             self.assertIn(stored, form.as_p())
+
+
+class FormIntegrationTestCase(TempFileMixin, FormIntegrationMixin, SimpleTestCase):
+    """Using StickyUploadWidget in a Form class."""
+
+    form_class = TestForm
+
+
+class ExampleForm(forms.ModelForm):
+
+    class Meta:
+        model = Example
+        fields = ('name', 'upload', )
+        widgets = {
+            'upload': StickyUploadWidget
+        }
+
+
+class ModelFormIntegrationTestCase(TempFileMixin, FormIntegrationMixin, SimpleTestCase):
+    """Using StickyUploadWidget in a ModelForm class."""
+
+    form_class = ExampleForm
+
+    def test_save(self):
+        """Save the model from the valid model form."""
+        with self.settings(MEDIA_ROOT=self.temp_dir):
+            storage = FileSystemStorage()
+            stored = serialize_upload(self.temp_name, storage)
+            data = {'name': 'foo', '_upload': stored}
+            form = self.form_class(data=data, files={})
+            self.assertTrue(form.is_valid())
+            instance = form.save()
+            self.assertTrue(instance.upload)
