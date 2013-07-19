@@ -34,8 +34,8 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
     def test_render(self):
         """Default render of the widget without any value."""
         self.assertHTMLEqual(self.widget.render('myfile', None),
-            '<input type="file" name="myfile" />' +
-            '<input type="hidden" name="_myfile" data-upload-url="/sticky-uploads/default/" />')
+            '<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+            '<input type="hidden" name="_myfile" />')
 
     def test_render_with_initial(self):
         """Render with standard FieldFile."""
@@ -44,8 +44,8 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
             'Currently: <a href="something">something</a> ' +
             '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
             '<label for="myfile-clear_id"> Clear</label><br />' +
-            'Change:<input type="file" name="myfile" />' +
-            '<input type="hidden" name="_myfile" data-upload-url="/sticky-uploads/default/" />')
+            'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+            '<input type="hidden" name="_myfile" />')
 
     def test_render_with_restored_file(self):
         """Render with File which has been restored."""
@@ -56,8 +56,8 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
                 'Currently: <a href="#">{0}</a> '.format(self.temp_name) +
                 '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
                 '<label for="myfile-clear_id"> Clear</label><br />' +
-                'Change:<input type="file" name="myfile" />' +
-                '<input type="hidden" name="_myfile" value="1234" data-upload-url="/sticky-uploads/default/" />')
+                'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+                '<input type="hidden" name="_myfile" value="1234" />')
 
     def test_value_from_files(self):
         """Get uploaded file from the FILES as normal."""

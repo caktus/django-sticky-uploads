@@ -55,8 +55,8 @@
 
         init: function () {
             this.processing = false;
+            this.options.url = this.$element.data('uploadUrl');
             this.$hidden = $(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
-            this.options.url = this.$hidden.data('uploadUrl');
             this.$form = this.$element.parents('form').eq(0);
             this.$element.on("change", $.proxy(this.change, this));
             this.$form.on("submit", $.proxy(this.submit, this));
@@ -160,5 +160,10 @@
             }
         });
     };
+
+    $(document).ready(function () {
+        // Auto-bind file inputs with data-upload-url attributes
+        $(':input[type=file][data-upload-url]').djangoUploader();
+    });
 
 })(jQuery, window, document);

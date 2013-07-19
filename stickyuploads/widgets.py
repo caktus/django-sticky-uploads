@@ -39,8 +39,9 @@ class StickyUploadWidget(forms.ClearableFileInput):
         location = getattr(value, '_seralized_location', '')
         if location and not hasattr(value, 'url'):
             value.url = '#'
+        attrs = attrs or {}
+        attrs.update({'data-upload-url': self.url})
         parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
         hidden_name = self.get_hidden_name(name)
-        hidden_attrs = {'data-upload-url': self.url}
-        hidden = forms.HiddenInput().render(hidden_name, location, attrs=hidden_attrs)
+        hidden = forms.HiddenInput().render(hidden_name, location)
         return mark_safe(parent + hidden)
