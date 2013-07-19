@@ -80,32 +80,39 @@ class DeserializeTestCase(SimpleTestCase):
 class OpenStoredFileTestCase(SimpleTestCase):
     """Deserialize and open file from a storage."""
 
+    def setUp(self):
+        super(OpenStoredFileTestCase, self).setUp()
+        self.temp_dir = tempfile.mkdtemp()
+        _, self.temp_name = tempfile.mkstemp(dir=self.temp_dir)
+        with open(self.temp_name, 'w') as f:
+            f.write('X')
+
+    def tearDown(self):
+        super(OpenStoredFileTestCase, self).tearDown()
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
     def test_open_file(self):
         """Restore and open file from storage."""
-        temp_dir = tempfile.mkdtemp()
-        _, temp_name = tempfile.mkstemp(dir=temp_dir)
-        with open(temp_name, 'w') as f:
-            f.write('X')
-        with self.settings(MEDIA_ROOT=temp_dir):
+        with self.settings(MEDIA_ROOT=self.temp_dir):
             storage = FileSystemStorage()
-            value = utils.serialize_upload(temp_name, storage)
+            value = utils.serialize_upload(self.temp_name, storage)
             result = utils.open_stored_file(value)
             self.assertTrue(isinstance(result, File))
-            self.assertEqual(result.name, temp_name)
-        shutil.rmtree(temp_dir, ignore_errors=True)
+            self.assertEqual(result.name, self.temp_name)
 
     def test_bad_signature(self):
         """Attempt to open file when SECRET_KEY has changed."""
-        storage = FileSystemStorage()
-        value = utils.serialize_upload('test.png', storage)
-        with self.settings(SECRET_KEY='1234'):
-            result = utils.open_stored_file(value)
-            self.assertIsNone(result)
+        with self.settings(MEDIA_ROOT=self.temp_dir):
+            storage = FileSystemStorage()
+            value = utils.serialize_upload(self.temp_name, storage)
+            with self.settings(SECRET_KEY='1234'):
+                result = utils.open_stored_file(value)
+                self.assertIsNone(result)
 
     def test_unknown_storage(self):
         """Attempt to open file with storage class which is no longer importable."""
         value = signing.dumps({
-            'name': 'test.png',
+            'name': self.temp_name,
             'storage': 'does.not.exist',
         })
         result = utils.open_stored_file(value)
@@ -113,10 +120,8 @@ class OpenStoredFileTestCase(SimpleTestCase):
 
     def test_file_does_not_exist(self):
         """Restore file not found in the storage."""
-        temp_dir = tempfile.mkdtemp()
-        with self.settings(MEDIA_ROOT=temp_dir):
+        with self.settings(MEDIA_ROOT=self.temp_dir):
             storage = FileSystemStorage()
             value = utils.serialize_upload('test.png', storage)
             result = utils.open_stored_file(value)
             self.assertIsNone(result)
-        shutil.rmtree(temp_dir, ignore_errors=True)
