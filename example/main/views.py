@@ -1,24 +1,21 @@
+from __future__ import unicode_literals
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from stickyuploads.widgets import StickyUploadWidget
-
-
-class ExampleForm(forms.Form):
-    upload = forms.FileField(widget=StickyUploadWidget)
-    other = forms.BooleanField()
+from .forms import SavedUploadForm
 
 
 @login_required
 def home(request):
     if request.method == 'POST':
-        form = ExampleForm(request.POST, request.FILES)
+        form = SavedUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            upload = form.cleaned_data['upload']
+            upload = form.save()
             messages.success(request, 'You have successfully uploaded %s' % upload)
             return redirect('home')
     else:
-        form = ExampleForm()
+        form = SavedUploadForm()
     return render(request, 'index.html', {'form': form})
