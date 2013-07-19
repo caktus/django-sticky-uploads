@@ -58,8 +58,10 @@
             this.options.url = this.$element.data('uploadUrl');
             this.$hidden = $(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
             this.$form = this.$element.parents('form').eq(0);
-            this.$element.on("change", $.proxy(this.change, this));
-            this.$form.on("submit", $.proxy(this.submit, this));
+            if (this.enabled()) {
+                this.$element.on("change", $.proxy(this.change, this));
+                this.$form.on("submit", $.proxy(this.submit, this));                
+            }
         },
 
         change: function (event) {
@@ -142,6 +144,20 @@
             if (this.processing) {
                 this.processing.abort();
             }
+        },
+
+        enabled: function () {
+            // Checks for necessary browser support
+            var xhr2 = false,
+                fileApi = false,
+                xhr = new XMLHttpRequest();
+            if (typeof xhr.upload !== "undefined") {
+                xhr2 = true;
+            }
+            if (window.FormData) {
+                fileApi = true;
+            }
+            return xhr2 && fileApi;
         },
 
         _add_csrf_header: function (xhr, settings) {
