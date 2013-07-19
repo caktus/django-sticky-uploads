@@ -6,20 +6,14 @@ import shutil
 import tempfile
 
 from django.core.urlresolvers import reverse
-from django.core.files.storage import DefaultStorage
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from ..compat import get_user_model
+from ..storage import TempFileSystemStorage
 from ..utils import serialize_upload
 from .base import TempFileMixin
 
 
-@override_settings(
-    DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage',
-    MEDIA_ROOT=tempfile.gettempdir(),
-    MEDIA_URL='/test-media/',
-)
 class UploadViewTestCase(TempFileMixin, TestCase):
     """View to handle background AJAX upload."""
 
@@ -39,12 +33,12 @@ class UploadViewTestCase(TempFileMixin, TestCase):
             response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.content.decode('utf-8'))
-        storage = DefaultStorage()
+        storage = TempFileSystemStorage()
         filename = os.path.basename(self.temp_name)
         expected = {
             'is_valid': True,
             'filename': filename,
-            'url': '/test-media/' + filename,
+            'url': None,
             'stored': serialize_upload(filename, storage),
         }
         self.assertEqual(result, expected)

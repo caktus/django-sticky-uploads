@@ -13,7 +13,7 @@ class UploadView(View):
     """Base view class for accepting file uploads."""
 
     form_class = UploadForm
-    storage_class = None
+    storage_class = 'stickyuploads.storage.TempFileSystemStorage'
 
     def post(self, *args, **kwargs):
         """Save file and return saved info or report errors."""
