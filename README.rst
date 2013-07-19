@@ -1,7 +1,8 @@
 Django Sticky Uploads
 ========================
 
-Welcome to the documentation for django-sticky-uploads!
+django-sticky-uploads is a progressively enhanced file input widget for Django 
+which uploads the file in the background and also retains value on form errors.
 
 .. image::
     https://secure.travis-ci.org/caktus/django-sticky-uploads.png?branch=master
@@ -9,10 +10,45 @@ Welcome to the documentation for django-sticky-uploads!
         :target: https://secure.travis-ci.org/caktus/django-sticky-uploads
 
 
+Requirements/Installing
+-----------------------------------
+
+django-sticky-uploads requires Python 2.6-2.7 or 3.2+. It also requires Django >= 1.4.
+
+The easiest way to install django-sticky-uploads is using `pip <http://www.pip-installer.org/>`_::
+
+    pip install django-sticky-uploads
+
+
+Browser Support
+-----------------------------------
+
+This project makes use of `progressive enhancement <http://en.wikipedia.org/wiki/Progressive_enhancement>`_
+meaning that while all browers are supported, they will not all have the same user-experience. If
+the browser does not support the necessary client-side features then it will fall back to the
+default file upload behaviour.
+
+The primary HTML5 dependencies are `File API <http://caniuse.com/fileapi>`_ and
+`XHR2 <http://caniuse.com/xhr2>`_ meaning that the following desktop/mobile browsers should get the enhanced
+experience:
+
+* Chrome 13+
+* Firefox 4+
+* Internet Explorer 10+
+* Safari 6+
+* Opera 12+
+* iOS Safari 6+
+* Android Brower 3+
+* Blackberry Broswer 10+
+* Opera Mobile 12+
+* Chrome for Android 27+
+* Firefox for Android 22+
+
+
 Documentation
 -----------------------------------
 
-Documentation on using django-sticky-uploads is available on 
+Additional documentation on using django-sticky-uploads is available on 
 `Read The Docs <http://readthedocs.org/docs/django-django-sticky-uploads/>`_.
 
 
