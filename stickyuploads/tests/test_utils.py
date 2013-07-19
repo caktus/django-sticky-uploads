@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import os
 import shutil
 import tempfile
 
@@ -88,7 +89,7 @@ class OpenStoredFileTestCase(TempFileMixin, SimpleTestCase):
             value = utils.serialize_upload(self.temp_name, storage)
             result = utils.open_stored_file(value)
             self.assertTrue(isinstance(result, File))
-            self.assertEqual(result.name, self.temp_name)
+            self.assertEqual(result.name, os.path.basename(self.temp_name))
 
     def test_bad_signature(self):
         """Attempt to open file when SECRET_KEY has changed."""

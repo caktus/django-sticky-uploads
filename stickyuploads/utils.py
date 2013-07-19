@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import os
+
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
@@ -53,4 +55,5 @@ def open_stored_file(value):
         storage = storage_class()
         if storage.exists(filename):
             upload = storage.open(filename)
+            upload.name = os.path.basename(filename)
     return upload
