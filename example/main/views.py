@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from stickyuploads.widgets import StickyUploadWidget
@@ -10,6 +11,7 @@ class ExampleForm(forms.Form):
     other = forms.BooleanField()
 
 
+@login_required
 def home(request):
     if request.method == 'POST':
         form = ExampleForm(request.POST, request.FILES)

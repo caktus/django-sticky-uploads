@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Login to Django Sticky Uploads Example</h1>
+    <form class="upload-form" action="." method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+        <div class="clear"></div>
+    </form>
+{% endblock %}
