@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.core.urlresolvers import reverse_lazy
 from django.utils.safestring import mark_safe
 
 from .utils import open_stored_file 
@@ -8,6 +9,10 @@ from .utils import open_stored_file
 
 class StickyUploadWidget(forms.ClearableFileInput):
     """Customize file uploader widget to handle AJAX upload and preserve value."""
+
+    def __init__(self, *args, **kwargs):
+        self.url = kwargs.pop('url', reverse_lazy('sticky-upload-default'))
+        super(StickyUploadWidget, self).__init__(*args, **kwargs)
 
     def get_hidden_name(self, name):
         """Get expected hidden name from the original field name."""
@@ -36,5 +41,6 @@ class StickyUploadWidget(forms.ClearableFileInput):
             value.url = '#'
         parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
         hidden_name = self.get_hidden_name(name)
-        hidden = forms.HiddenInput().render(hidden_name, location)
+        hidden_attrs = {'data-upload-url': self.url}
+        hidden = forms.HiddenInput().render(hidden_name, location, attrs=hidden_attrs)
         return mark_safe(parent + hidden)

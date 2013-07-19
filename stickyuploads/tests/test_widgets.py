@@ -34,7 +34,8 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
     def test_render(self):
         """Default render of the widget without any value."""
         self.assertHTMLEqual(self.widget.render('myfile', None),
-            '<input type="file" name="myfile" /><input type="hidden" name="_myfile" />')
+            '<input type="file" name="myfile" />' +
+            '<input type="hidden" name="_myfile" data-upload-url="/sticky-uploads/default/" />')
 
     def test_render_with_initial(self):
         """Render with standard FieldFile."""
@@ -43,7 +44,8 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
             'Currently: <a href="something">something</a> ' +
             '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
             '<label for="myfile-clear_id"> Clear</label><br />' +
-            'Change:<input type="file" name="myfile" /><input type="hidden" name="_myfile" />')
+            'Change:<input type="file" name="myfile" />' +
+            '<input type="hidden" name="_myfile" data-upload-url="/sticky-uploads/default/" />')
 
     def test_render_with_restored_file(self):
         """Render with File which has been restored."""
@@ -55,7 +57,7 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
                 '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
                 '<label for="myfile-clear_id"> Clear</label><br />' +
                 'Change:<input type="file" name="myfile" />' +
-                '<input type="hidden" name="_myfile" value="1234" />')
+                '<input type="hidden" name="_myfile" value="1234" data-upload-url="/sticky-uploads/default/" />')
 
     def test_value_from_files(self):
         """Get uploaded file from the FILES as normal."""
