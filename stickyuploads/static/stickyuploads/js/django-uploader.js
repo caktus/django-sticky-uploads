@@ -10,7 +10,8 @@
  * BSD License
  *
 */
-;(function ($, window, document, undefined) {
+;var djUp = djUp || jQuery;
+(function ($, window, document, undefined) {
     var pluginName = "djangoUploader",
         defaults = {
             url: "",
@@ -182,4 +183,4 @@
         $(':input[type=file][data-upload-url]').djangoUploader();
     });
 
-})(djUp || jQuery, window, document);
+})(djUp, window, document);
