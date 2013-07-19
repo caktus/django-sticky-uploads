@@ -6,7 +6,7 @@ It assumes that you have already installed django-sticky-uploads via::
 
     pip install django-sticky-uploads
 
-and have an existing projet using a compatible version of Django and Python.
+and have an existing project using a compatible version of Django and Python.
 
 
 Necessary Settings
@@ -115,12 +115,13 @@ the default ``ClearableFileInput`` and can be used on any Django ``Form`` includ
 
     from stickyuploads.widgets import StickyUploadWidget
 
+
     class ExampleForm(forms.Form):
         upload = forms.FileField(widget=StickyUploadWidget)
 
 Note that to make use of the background upload, the user must be authenticated so
 the ``StickyUploadWidget`` should only be used on forms/views where the user is
-authentitcated.
+authenticated.
 
 
 Next Steps

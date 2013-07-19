@@ -24,9 +24,9 @@ Browser Support
 -----------------------------------
 
 This project makes use of `progressive enhancement <http://en.wikipedia.org/wiki/Progressive_enhancement>`_
-meaning that while all browers are supported, they will not all have the same user-experience. If
+meaning that while all browsers are supported, they will not all have the same user-experience. If
 the browser does not support the necessary client-side features then it will fall back to the
-default file upload behaviour.
+default file upload behavior.
 
 The primary HTML5 dependencies are `File API <http://caniuse.com/fileapi>`_ and
 `XHR2 <http://caniuse.com/xhr2>`_ meaning that the following desktop/mobile browsers should get the enhanced
