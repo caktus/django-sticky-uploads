@@ -70,6 +70,9 @@ License
 django-sticky-uploads is released under the BSD License. See the 
 `LICENSE <https://github.com/caktus/django-sticky-uploads/blob/master/LICENSE>`_ file for more details.
 
+A bundled version of jQuery 1.10.2 is included the source distribution which is used under
+its `MIT license <http://jquery.org/license>`_.
+
 
 Contributing
 --------------------------------------

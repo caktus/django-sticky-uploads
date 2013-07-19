@@ -12,3 +12,6 @@
 docs/_build/*
 dist/*
 example/media/*
+stickyuploads/static/stickyuploads/js/jquery.init.js
+stickyuploads/static/stickyuploads/js/*.bundle.js
+stickyuploads/static/stickyuploads/js/*.min.js

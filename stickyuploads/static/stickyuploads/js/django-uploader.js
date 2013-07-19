@@ -182,4 +182,4 @@
         $(':input[type=file][data-upload-url]').djangoUploader();
     });
 
-})(jQuery, window, document);
+})(djUp || jQuery, window, document);
