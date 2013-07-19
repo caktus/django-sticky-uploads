@@ -1,4 +1,5 @@
 from django.core import signing
+from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
 
@@ -30,7 +31,11 @@ def deserialize_upload(value):
         # TODO: Log invalid signature
         pass
     else:
-        result['storage'] = get_storage_class(result['storage'])
+        try:
+            result['storage'] = get_storage_class(result['storage'])
+        except ImproperlyConfigured:
+            # TODO: Log invalid class
+            result = {'name': None, 'storage': None}
     return result
 
 
@@ -44,5 +49,6 @@ def open_stored_file(value):
     storage_class = result['storage']
     if storage_class and filename:
         storage = storage_class()
-        upload = storage.open(filename)
+        if storage.exists(filename):
+            upload = storage.open(filename)
     return upload
