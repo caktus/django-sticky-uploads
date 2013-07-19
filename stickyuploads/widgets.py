@@ -4,11 +4,17 @@ from django import forms
 from django.core.urlresolvers import reverse_lazy
 from django.utils.safestring import mark_safe
 
+from . import __version__
 from .utils import open_stored_file 
 
 
 class StickyUploadWidget(forms.ClearableFileInput):
     """Customize file uploader widget to handle AJAX upload and preserve value."""
+
+    class Media(object):
+        js = (
+            'stickyuploads/js/django-uploader.bundle.min.js?v=%s' % __version__,
+        )
 
     def __init__(self, *args, **kwargs):
         self.url = kwargs.pop('url', reverse_lazy('sticky-upload-default'))
