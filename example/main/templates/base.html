@@ -1,0 +1,17 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Django Sticky Uploads Example</title>
+    <link rel="stylesheet" media="all" href="{% static 'css/demo.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.js' %}"></script>
+</body>
+</html>

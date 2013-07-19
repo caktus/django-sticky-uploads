@@ -1,0 +1,32 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #737373;
+    background: #f0f0f0;
+}
+
+.wrapper {
+    margin: 100px auto;
+    padding: 20px;
+    width: 500px;
+    border: 1px solid #b3b3b3; 
+    border-radius: 4px; 
+    box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+    background: #fcfcfc;
+}
+
+.clear {
+    clear: both;
+}
+
+.upload-form button {
+    float: right;
+}
+
+.upload-form label:after {
+    content: "*";
+    color: red;
+}
+
+.message.info {
+    color: green;
+}

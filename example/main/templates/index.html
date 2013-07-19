@@ -1,21 +1,20 @@
-{% load static from staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Django Stick Uploads Example</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Django Sticky Uploads Example</h1>
+    <p class="description">
+        Use the below for to test the background upload functionality of django-sticky-uploads.
+        If the file was successfully uploaded in the background it should persist even if you do not check the required checkbox.
+    </p>
     {% if messages %}
         {% for message in messages %}
             <div class="message {{ messsage.tags }}">{{ message }}</div>
         {% endfor %}
     {% endif %}
-    <form action="." method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+    <form class="upload-form" action="." method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
         {% csrf_token %}
-        {{ form }}
+        {{ form.as_p }}
         <button type="submit">Submit</button>
+        <div class="clear"></div>
     </form>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.js' %}"></script>
-</body>
-</html>
+{% endblock %}
