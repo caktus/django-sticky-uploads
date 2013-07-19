@@ -21,4 +21,4 @@ branches:
 
 matrix:
   allow_failures:
-    - env: TOXENV=py26-trunk,py32-trunk
+    - env: TOXENV=py27-trunk,py32-trunk
