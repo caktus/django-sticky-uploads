@@ -1,0 +1,3 @@
+[run]
+source = stickyuploads
+omit = */tests*,*/urls.py
