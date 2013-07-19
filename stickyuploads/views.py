@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import json
 
 from django.core.files.storage import get_storage_class

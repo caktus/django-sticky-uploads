@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
