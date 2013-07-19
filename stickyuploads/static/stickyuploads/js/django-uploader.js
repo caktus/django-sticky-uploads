@@ -72,8 +72,8 @@
                 formData.append("upload", file);
             }
             if (this.before(formData) !== false) {
-                this.processing = true;
-                $.ajax({
+                this.abort();
+                this.processing = $.ajax({
                     url: this.options.url,
                     type: 'POST',
                     data: formData,
@@ -128,13 +128,18 @@
 
         submit: function (event) {
             // Hijacked form submission
+            // Cancel current request and file will be submitted normally
+            this.abort();
+            if (this.$hidden.val()) {
+                // Don't submit the file since its already on the server
+                this.$element.prop('disabled', true);
+            }
+        },
+
+        abort: function () {
+            // Abort the current upload if any
             if (this.processing) {
-                event.preventDefault();
-            } else {
-                if (this.$hidden.val()) {
-                    // Don't submit the file since its already on the server
-                    this.$element.prop('disabled', true);
-                }
+                this.processing.abort();
             }
         },
 
