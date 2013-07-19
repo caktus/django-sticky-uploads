@@ -3,6 +3,11 @@ Django Sticky Uploads
 
 Welcome to the documentation for django-sticky-uploads!
 
+.. image::
+    https://secure.travis-ci.org/caktus/django-sticky-uploads.png?branch=master
+    :alt: Build Status
+        :target: https://secure.travis-ci.org/caktus/django-sticky-uploads
+
 
 Documentation
 -----------------------------------
