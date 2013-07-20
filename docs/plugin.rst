@@ -72,3 +72,51 @@ returns ``false`` then it will prevent the upload. An example is given below:
     user. Any validations should be replicated on the server as well. This
     should primarily be used for warnings to the user that data they are about
     to submit is not going to be valid.
+
+
+``success``
+______________________________________________________________________
+
+The ``success`` callback is called when the server has completed a successful
+upload. Successful in the case means that the server gave a 20X response which
+could include the case where the server did not validate something about the
+file which was uploaded. A truly successful server response will contain
+the following info:
+
+.. code-block:: javascript
+
+    {
+        'is_valid': true, // Response was valid
+        'filename': 'filename.txt', // File name which was uploaded
+        'url': '', // URL (if any) where this file can be accessed
+        'stored': 'XXXXXX' // Serialized stored value
+    }
+
+All callbacks should first check for ``is_valid`` before continuing any
+other processing. The other keys are not included when the upload is not valid.
+
+.. code-block:: javascript
+
+    var plugin = $('#myfield').data('djangoUploader');
+    plugin.options.success = function (response) {
+        if (response.is_valid) {
+            // Do something
+        } else {
+            // Do something else
+        }
+    };
+
+
+``failure``
+______________________________________________________________________
+
+The ``failure`` callback is called when the server has returned a 40X or 50X
+response. This might be caused by the user not having permission to do the upload
+or a server timeout. The callback is given the server response.
+
+.. code-block:: javascript
+
+    var plugin = $('#myfield').data('djangoUploader');
+    plugin.options.failure = function (response) {
+        // Do something
+    };

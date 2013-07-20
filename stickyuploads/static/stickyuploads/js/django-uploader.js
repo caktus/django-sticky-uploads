@@ -124,7 +124,7 @@ var djUp = djUp || jQuery;
             // Runs on a error (40X-50X) response
             this.$hidden.val("");
             if (this.options.failure) {
-                this.options.success.failure(this, [response]);
+                this.options.failure.apply(this, [response]);
             }
         },
 
