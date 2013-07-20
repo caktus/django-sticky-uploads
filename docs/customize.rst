@@ -1,4 +1,4 @@
-Customizing django-sticky-uploads
+Customizing the Server Side
 ================================================
 
 django-sticky-uploads ships with a default view for handling the background file
