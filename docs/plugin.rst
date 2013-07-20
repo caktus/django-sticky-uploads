@@ -79,9 +79,8 @@ ______________________________________________________________________
 
 The ``success`` callback is called when the server has completed a successful
 upload. Successful in the case means that the server gave a 20X response which
-could include the case where the server did not validate something about the
-file which was uploaded. A truly successful server response will contain
-the following info:
+could include the case where the server did not validate the file which was
+uploaded. A successful server response will contain the following info:
 
 .. code-block:: javascript
 
