@@ -119,3 +119,40 @@ or a server timeout. The callback is given the server response.
     plugin.options.failure = function (response) {
         // Do something
     };
+
+
+Handling the Form Submit
+----------------------------------------------------------------------
+
+Because the file is being uploaded in the background while the user processes
+the rest of the form, there is a case where the file upload has not completed
+but the user has submitted the form. In this case the default behavior of the
+plugin is to abort upload request and submit the form as normal. This means
+the at least part of the file will have been uploaded twice and the effort
+in the background upload is wasted.
+
+If you chose you can handle this case differently using the ``submit`` callback.
+This callback is passed a single argument which is the form submit event. One
+example of using this option is given below:
+
+.. code-block:: javascript
+
+    var plugin = $('#myfield').data('djangoUploader');
+    plugin.options.submit = function (event) {
+        var self = this, callback;
+        if (this.processing) {
+            // Prevent submission
+            event.preventDefault();
+            callback = function () {
+                if (self.processing) {
+                    // Wait 500 milliseconds and try again
+                    setTimeout(callback, 500);
+                } else {
+                    // Done processing so submit the form
+                    self.$form.submit();
+                }
+            };
+            // Wait 500 milliseconds and try again
+            setTimeout(callback, 500);
+        }
+    };

@@ -18,6 +18,7 @@ var djUp = djUp || jQuery;
             before: null,
             success: null,
             failure: null,
+            submit: null,
             csrfCookieName: "csrftoken"
         };
 
@@ -130,8 +131,13 @@ var djUp = djUp || jQuery;
 
         submit: function (event) {
             // Hijacked form submission
-            // Cancel current request and file will be submitted normally
-            this.abort();
+            if (this.options.submit) {
+                this.options.submit.apply(this, [event]);
+            } else {
+                // Cancel current request and file will be submitted normally
+                this.abort();
+            }
+            
             if (this.$hidden.val()) {
                 // Don't submit the file since its already on the server
                 this.$element.prop("disabled", true);
