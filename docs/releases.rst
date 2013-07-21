@@ -1,6 +1,12 @@
 Release History
 ========================
 
+v0.1.1 (Released TBD)
+-----------------------------------
+
+* Security issue related to client changing the upload url specified by the widget for the upload
+* *Backwards Incompatible*: The signatures of the internal ``UploadForm.stash``, ``serialize_upload``, ``deserialize_upload`` and ``open_stored_file`` now require the upload url
+
 
 v0.1.0 (Released 2013-07-19)
 -----------------------------------
