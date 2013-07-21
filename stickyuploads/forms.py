@@ -10,7 +10,7 @@ class UploadForm(forms.Form):
 
     upload = forms.FileField()
 
-    def stash(self, storage):
+    def stash(self, storage, url):
         """Stores the uploaded file in a temporary storage location."""
         result = {}
         if self.is_valid():
@@ -21,5 +21,5 @@ class UploadForm(forms.Form):
                 result['url'] = storage.url(name)
             except NotImplementedError:
                 result['url'] = None
-            result['stored'] = serialize_upload(name, storage)
+            result['stored'] = serialize_upload(name, storage, url)
         return result

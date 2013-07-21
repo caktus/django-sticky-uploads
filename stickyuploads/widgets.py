@@ -35,7 +35,7 @@ class StickyUploadWidget(forms.ClearableFileInput):
             hidden_name = self.get_hidden_name(name)
             value = data.get(hidden_name, None)
             if value is not None:
-                upload = open_stored_file(value)
+                upload = open_stored_file(value, self.url)
                 if upload is not None:
                     setattr(upload, '_seralized_location', value)
         return upload

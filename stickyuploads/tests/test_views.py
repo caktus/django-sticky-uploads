@@ -39,7 +39,7 @@ class UploadViewTestCase(TempFileMixin, TestCase):
             'is_valid': True,
             'filename': filename,
             'url': None,
-            'stored': serialize_upload(filename, storage),
+            'stored': serialize_upload(filename, storage, self.url),
         }
         self.assertEqual(result, expected)
 

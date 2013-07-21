@@ -23,7 +23,7 @@ class UploadView(View):
             if form.is_valid():
                 storage = self.get_storage()
                 result['is_valid'] = True
-                info = form.stash(storage)
+                info = form.stash(storage, self.request.path)
                 result.update(info)
             else:
                 result['is_valid'] = False
