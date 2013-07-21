@@ -90,7 +90,6 @@ class DeserializeTestCase(SimpleTestCase):
         self.assertEqual(result, expected)
 
 
-
 class OpenStoredFileTestCase(TempFileMixin, SimpleTestCase):
     """Deserialize and open file from a storage."""
 

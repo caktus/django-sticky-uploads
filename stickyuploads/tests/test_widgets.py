@@ -75,3 +75,11 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
             value = self.widget.value_from_datadict(data={'_myfile': stored}, files={}, name='myfile')
             self.assertTrue(isinstance(value, File))
             self.assertEqual(value._seralized_location, stored)
+
+    def test_value_from_wrong_urls(self):
+        """Widget should not restore a value from a url other than the one specified."""
+        with self.settings(MEDIA_ROOT=self.temp_dir):
+            storage = FileSystemStorage()
+            stored = serialize_upload(self.temp_name, storage, '/some-other/url/')
+            value = self.widget.value_from_datadict(data={'_myfile': stored}, files={}, name='myfile')
+            self.assertIsNone(value)
