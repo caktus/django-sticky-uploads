@@ -137,7 +137,7 @@ var djUp = djUp || jQuery;
                 // Cancel current request and file will be submitted normally
                 this.abort();
             }
-            
+
             if (this.$hidden.val()) {
                 // Don't submit the file since its already on the server
                 this.$element.prop("disabled", true);
