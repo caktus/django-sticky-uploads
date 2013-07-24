@@ -18,6 +18,7 @@ var djUp = djUp || jQuery;
             before: null,
             success: null,
             failure: null,
+            submit: null,
             csrfCookieName: "csrftoken"
         };
 
@@ -67,15 +68,13 @@ var djUp = djUp || jQuery;
 
         change: function (event) {
             var formData = new FormData(),
-                i = 0, file;
+                file;
             if (this.element.files.length === 0) {
                 return;
             }
-            for (i = 0; i < this.element.files.length; i += 1) {
-                file = this.element.files[i];
+            file = this.element.files[0];
+            if (this.before(file) !== false) {
                 formData.append("upload", file);
-            }
-            if (this.before(formData) !== false) {
                 this.abort();
                 this.processing = $.ajax({
                     url: this.options.url,
@@ -95,12 +94,12 @@ var djUp = djUp || jQuery;
             }
         },
 
-        before: function (formData) {
+        before: function (file) {
             // Runs before the AJAX call.
             // Returning false will abort the call.
             var result = true;
             if (this.options.before) {
-                result = this.options.before.apply(this, [formData]);
+                result = this.options.before.apply(this, [file]);
             }
             return result;
         },
@@ -126,14 +125,19 @@ var djUp = djUp || jQuery;
             // Runs on a error (40X-50X) response
             this.$hidden.val("");
             if (this.options.failure) {
-                this.options.success.failure(this, [response]);
+                this.options.failure.apply(this, [response]);
             }
         },
 
         submit: function (event) {
             // Hijacked form submission
-            // Cancel current request and file will be submitted normally
-            this.abort();
+            if (this.options.submit) {
+                this.options.submit.apply(this, [event]);
+            } else {
+                // Cancel current request and file will be submitted normally
+                this.abort();
+            }
+            
             if (this.$hidden.val()) {
                 // Don't submit the file since its already on the server
                 this.$element.prop("disabled", true);

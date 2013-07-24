@@ -13,6 +13,7 @@ Contents
 
     start
     customize
+    plugin
     security
     releases
 
