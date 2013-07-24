@@ -1,7 +1,7 @@
 Release History
 ========================
 
-v0.2.0 (Released TBD)
+v0.2.0 (Released 2013-07-23)
 -----------------------------------
 
 * Security issue related to client changing the upload url specified by the widget for the upload
