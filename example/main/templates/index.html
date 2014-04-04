@@ -15,7 +15,6 @@
     <form class="upload-form" action="." method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
         {% csrf_token %}
         {{ form.as_p }}
-        <div class="progress-label"></div>
         <button type="submit">Submit</button>
         <div class="clear"></div>
     </form>
