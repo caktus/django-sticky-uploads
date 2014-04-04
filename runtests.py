@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 
+import django
 from django.conf import settings
 
 
@@ -22,6 +23,8 @@ if not settings.configured:
         SECRET_KEY='this-is-just-for-tests-so-not-that-secret',
         ROOT_URLCONF='stickyuploads.tests.urls',
     )
+    if hasattr(django, 'setup'):
+        django.setup()
 
 
 from django.test.utils import get_runner

@@ -37,7 +37,7 @@ def deserialize_upload(value, url):
     else:
         try:
             result['storage'] = get_storage_class(result['storage'])
-        except ImproperlyConfigured:
+        except (ImproperlyConfigured, ImportError):
             # TODO: Log invalid class
             result = {'name': None, 'storage': None}
     return result
