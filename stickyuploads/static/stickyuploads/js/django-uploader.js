@@ -63,6 +63,8 @@ var djUp = djUp || jQuery;
             if (this.enabled()) {
                 this.$element.on("change", $.proxy(this.change, this));
                 this.$form.on("submit", $.proxy(this.submit, this));
+                this.$progress = $("<span>").addClass("progress-label");
+                this.$element.after(this.$progress)
             }
         },
 
@@ -83,7 +85,8 @@ var djUp = djUp || jQuery;
                     crossDomain: false,
                     beforeSend: $.proxy(this._add_csrf_header, this),
                     processData: false,
-                    contentType: false
+                    contentType: false,
+                    xhr: $.proxy(this.xhr, this)
                 }).done(
                     $.proxy(this.done, this)
                 ).fail(
@@ -165,12 +168,28 @@ var djUp = djUp || jQuery;
             return xhr2 && fileApi;
         },
 
+        
         _add_csrf_header: function (xhr, settings) {
             var csrftoken = "";
+                
             if (!csrfSafeMethod(settings.type)) {
                 csrftoken = getCookie(this.options.csrfCookieName);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
+        },
+
+        xhr: function(){
+            //progress indicator for the uploading file
+            xhr = new XMLHttpRequest();
+            progressLabel = this.$progress;
+            xhr.upload.addEventListener("progress", function (file){
+                if (file.lengthComputable) {
+                    var percentLoaded = Math.round((file.loaded / file.total) * 100);
+                    // Increase the progress progress label until 100%
+                    progressLabel.text(percentLoaded + '%');
+                }
+            });
+        return xhr;
         }
     };
 
