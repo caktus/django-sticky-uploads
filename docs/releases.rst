@@ -2,7 +2,7 @@ Release History
 ========================
 
 
-v0.3.0 (Released TBD)
+v0.3.0 (Released 2014-05-23)
 -----------------------------------
 
 * Added upload progress indicator
