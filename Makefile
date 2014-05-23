@@ -1,5 +1,5 @@
 STATIC_DIR = ./stickyuploads/static/stickyuploads
-JQUERY_VERSION = 1.10.2
+JQUERY_VERSION = 1.11.1
 JQUERY = ${STATIC_DIR}/js/jquery-${JQUERY_VERSION}.js
 JQUERY_INIT = ${STATIC_DIR}/js/jquery.init.js
 JQUERY_BUNDLE = ${STATIC_DIR}/js/jquery.bundle.js
