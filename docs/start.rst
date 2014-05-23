@@ -89,7 +89,7 @@ version of the plugin code.
     {% load static from staticfiles %}
     <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.bundle.min.js' %}"></script>
 
-This version includes the plugin code as well as jQuery v1.10.2 together.
+This version includes the plugin code as well as jQuery v1.11.1 together.
 
 
 In the Django Admin

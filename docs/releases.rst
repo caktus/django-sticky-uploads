@@ -7,6 +7,7 @@ v0.3.0 (Released TBD)
 
 * Added upload progress indicator
 * Fixed support for Django 1.7
+* Upgraded bundled jQuery version to 1.11.1
 
 
 v0.2.0 (Released 2013-07-23)
