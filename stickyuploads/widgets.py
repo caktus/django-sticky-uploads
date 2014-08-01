@@ -5,11 +5,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.safestring import mark_safe
 
 from . import __version__
-from .utils import open_stored_file 
+from .utils import open_stored_file
 
 
 class StickyUploadWidget(forms.ClearableFileInput):
     """Customize file uploader widget to handle AJAX upload and preserve value."""
+    # template to use when there is no url
+    url_markup_template_tmp = '{1}'
 
     class Media(object):
         js = (
@@ -45,6 +47,7 @@ class StickyUploadWidget(forms.ClearableFileInput):
         location = getattr(value, '_seralized_location', '')
         if location and not hasattr(value, 'url'):
             value.url = '#'
+            self.url_markup_template = self.url_markup_template_tmp
         attrs = attrs or {}
         attrs.update({'data-upload-url': self.url})
         parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
