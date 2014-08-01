@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
 
+import django
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.test import SimpleTestCase
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.unittest.case import skipIf, skipUnless
 
 from ..utils import serialize_upload
 from ..widgets import StickyUploadWidget
@@ -49,6 +51,20 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
             'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
             '<input type="hidden" name="_myfile" />')
 
+    @skipUnless(django.VERSION < (1, 6), "Django does not allow overriding url_markup_template before 1.6")
+    def test_render_with_restored_file_14_and_15(self):
+        """Render with File which has been restored."""
+        with open(self.temp_name) as temp:
+            value = File(temp)
+            setattr(value, '_seralized_location', '1234')
+            self.assertHTMLEqual(self.widget.render('myfile', value),
+                'Currently: <a href="#">{0}</a> '.format(self.temp_name) +
+                '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
+                '<label for="myfile-clear_id"> Clear</label><br />' +
+                'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+                '<input type="hidden" name="_myfile" value="1234" />')
+
+    @skipIf(django.VERSION < (1, 6), "Django does not allow overriding url_markup_template before 1.6")
     def test_render_with_restored_file(self):
         """Render with File which has been restored."""
         with open(self.temp_name) as temp:
