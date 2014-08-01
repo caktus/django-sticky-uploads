@@ -55,7 +55,7 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
             value = File(temp)
             setattr(value, '_seralized_location', '1234')
             self.assertHTMLEqual(self.widget.render('myfile', value),
-                'Currently: <a href="#">{0}</a> '.format(self.temp_name) +
+                'Currently: {0} '.format(self.temp_name) +
                 '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
                 '<label for="myfile-clear_id"> Clear</label><br />' +
                 'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
