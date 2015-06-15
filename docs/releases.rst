@@ -8,6 +8,7 @@ v0.4.0 (Unreleased)
 * Do not display link for temporary uploads (supported on Django 1.6+)
 * Dropped testing support for Python 2.6
 * Added testing for Django 1.8
+* Updated bundled jQuery version to 1.11.3
 
 
 v0.3.0 (Released 2014-05-23)
