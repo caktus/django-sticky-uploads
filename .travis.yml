@@ -4,14 +4,14 @@ python:
   - "2.7"
 
 env:
-  - TOXENV=py26-1.4.X
-  - TOXENV=py26-1.5.X,py32-1.5.X
-  - TOXENV=py26-1.6.X,py32-1.6.X
+  - TOXENV=py27-1.4.X
+  - TOXENV=py27-1.5.X,py32-1.5.X
+  - TOXENV=py27-1.6.X,py32-1.6.X
   - TOXENV=py27-1.7.X,py32-1.7.X
-  - TOXENV=py27-trunk,py32-trunk
+  - TOXENV=py27-1.8.X,py32-1.8.X
 
 install:
-  - pip install tox
+  - pip install "tox>=1.8,<2.0"
 
 script:
     - tox
@@ -19,7 +19,3 @@ script:
 branches:
   only:
     - master
-
-matrix:
-  allow_failures:
-    - env: TOXENV=py27-trunk,py32-trunk
