@@ -47,7 +47,14 @@ class StickyUploadWidget(forms.ClearableFileInput):
         location = getattr(value, '_seralized_location', '')
         if location and not hasattr(value, 'url'):
             value.url = '#'
-            self.url_markup_template = self.url_markup_template_tmp
+            if hasattr(self, 'get_template_substitution_values'):
+                # Django 1.8+
+                self.template_with_initial = (
+                    '%(initial_text)s: %(initial)s %(clear_template)s'
+                    '<br />%(input_text)s: %(input)s')
+            elif hasattr(self, 'url_markup_template'):
+                # Django 1.6-1.7
+                self.url_markup_template = self.url_markup_template_tmp               
         attrs = attrs or {}
         attrs.update({'data-upload-url': self.url})
         parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)

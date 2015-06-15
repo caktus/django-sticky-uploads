@@ -13,6 +13,12 @@ if not settings.configured:
                 'NAME': ':memory:',
             }
         },
+        MIDDLEWARE_CLASSES=(
+            'django.middleware.common.CommonMiddleware',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.middleware.csrf.CsrfViewMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+        ),
         INSTALLED_APPS=(
             'django.contrib.auth',
             'django.contrib.contenttypes',
@@ -31,6 +37,8 @@ from django.test.utils import get_runner
 
 
 def runtests():
+    if hasattr(django, 'setup'):
+        django.setup()
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=1, interactive=True, failfast=False)
     failures = test_runner.run_tests(['stickyuploads', ])
