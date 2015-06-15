@@ -2,7 +2,7 @@ Release History
 ========================
 
 
-v0.4.0 (Unreleased)
+v0.4.0 (Released 2015-06-15)
 -------------------
 
 * Do not display link for temporary uploads (supported on Django 1.6+)
