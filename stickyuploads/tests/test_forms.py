@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.utils import unittest
+import unittest
 
 from mock import patch
 
