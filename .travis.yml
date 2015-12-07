@@ -5,10 +5,10 @@ python:
 
 env:
   - TOXENV=py27-1.4.X
-  - TOXENV=py27-1.5.X,py32-1.5.X
-  - TOXENV=py27-1.6.X,py32-1.6.X
-  - TOXENV=py27-1.7.X,py32-1.7.X
-  - TOXENV=py27-1.8.X,py32-1.8.X
+  - TOXENV=py27-1.5.X,py34-1.5.X
+  - TOXENV=py27-1.6.X,py34-1.6.X
+  - TOXENV=py27-1.7.X,py34-1.7.X
+  - TOXENV=py27-1.8.X,py34-1.8.X
 
 install:
   - pip install "tox>=1.8,<2.0"
