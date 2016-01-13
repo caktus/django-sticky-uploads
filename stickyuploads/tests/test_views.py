@@ -60,4 +60,4 @@ class UploadViewTestCase(TempFileMixin, TestCase):
             response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(result, {'is_valid': False})
+        self.assertEqual(result, {'is_valid': False, 'errors': {'upload': ['The submitted file is empty.']}})

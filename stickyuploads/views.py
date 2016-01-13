@@ -26,7 +26,10 @@ class UploadView(View):
                 info = form.stash(storage, self.request.path)
                 result.update(info)
             else:
-                result['is_valid'] = False
+                result.update({
+                    'is_valid': False,
+                    'errors': form.errors,
+                })
             return HttpResponse(json.dumps(result), content_type='application/json')
         else:
             return HttpResponseForbidden()
