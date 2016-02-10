@@ -3,13 +3,13 @@ from __future__ import unicode_literals
 import os
 import shutil
 import tempfile
+import unittest
 
 from django.conf import settings
 from django.core import signing
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage, DefaultStorage
 from django.test import SimpleTestCase
-from django.utils import unittest
 
 from .. import utils
 from .base import TempFileMixin

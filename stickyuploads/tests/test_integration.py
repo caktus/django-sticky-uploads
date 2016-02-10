@@ -73,7 +73,7 @@ class ExampleForm(forms.ModelForm):
         }
 
 
-class ModelFormIntegrationTestCase(TempFileMixin, FormIntegrationMixin, SimpleTestCase):
+class ModelFormIntegrationTestCase(TempFileMixin, FormIntegrationMixin, TestCase):
     """Using StickyUploadWidget in a ModelForm class."""
 
     form_class = ExampleForm
