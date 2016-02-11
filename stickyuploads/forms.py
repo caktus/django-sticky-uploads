@@ -1,4 +1,5 @@
 """Form logic for background saving uploaded files."""
+import os
 
 from django import forms
 
@@ -16,7 +17,7 @@ class UploadForm(forms.Form):
         if self.is_valid():
             upload = self.cleaned_data['upload']
             name = storage.save(upload.name, upload)
-            result['filename'] = name
+            result['filename'] = os.path.basename(name)
             try:
                 result['url'] = storage.url(name)
             except NotImplementedError:
