@@ -60,7 +60,7 @@ var djUp = djUp || jQuery;
             this.processing = false;
             this.options.url = this.$element.data("uploadUrl");
             this.$form = this.$element.closest("form");
-            this.$hidden = this.$form.find(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
+            this.$hidden = this.$form.find("input[type=hidden][name=_" + this.$element.attr("name")  + "]");
             if (this.enabled()) {
                 this.$element.on("change", $.proxy(this.change, this));
                 this.$form.on("submit", $.proxy(this.submit, this));
