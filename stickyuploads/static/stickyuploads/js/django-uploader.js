@@ -12,6 +12,7 @@
 */
 var djUp = djUp || jQuery;
 (function ($, window, document, undefined) {
+    "use strict";
     var pluginName = "djangoUploader",
         defaults = {
             url: "",
@@ -83,16 +84,17 @@ var djUp = djUp || jQuery;
                     type: "POST",
                     data: formData,
                     crossDomain: false,
-                    beforeSend: $.proxy(this._add_csrf_header, this),
+                    context: this,
+                    beforeSend: this._add_csrf_header,
                     processData: false,
                     contentType: false,
-                    xhr: $.proxy(this.xhr, this)
+                    xhr: this.xhr
                 }).done(
-                    $.proxy(this.done, this)
+                    this.done
                 ).fail(
-                    $.proxy(this.fail, this)
+                    this.fail
                 ).always(
-                    $.proxy(this.always, this)
+                    this.always
                 );
             }
         },
