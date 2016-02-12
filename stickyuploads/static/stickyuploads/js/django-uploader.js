@@ -12,6 +12,7 @@
 */
 var djUp = djUp || jQuery;
 (function ($, window, document, undefined) {
+    "use strict";
     var pluginName = "djangoUploader",
         defaults = {
             url: "",
@@ -58,8 +59,8 @@ var djUp = djUp || jQuery;
         init: function () {
             this.processing = false;
             this.options.url = this.$element.data("uploadUrl");
-            this.$hidden = $(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
-            this.$form = this.$element.parents("form").eq(0);
+            this.$form = this.$element.closest("form");
+            this.$hidden = this.$form.find("input[type=hidden][name=_" + this.$element.attr("name")  + "]");
             if (this.enabled()) {
                 this.$element.on("change", $.proxy(this.change, this));
                 this.$form.on("submit", $.proxy(this.submit, this));
@@ -83,16 +84,17 @@ var djUp = djUp || jQuery;
                     type: "POST",
                     data: formData,
                     crossDomain: false,
-                    beforeSend: $.proxy(this._add_csrf_header, this),
+                    context: this,
+                    beforeSend: this._add_csrf_header,
                     processData: false,
                     contentType: false,
-                    xhr: $.proxy(this.xhr, this)
+                    xhr: this.xhr
                 }).done(
-                    $.proxy(this.done, this)
+                    this.done
                 ).fail(
-                    $.proxy(this.fail, this)
+                    this.fail
                 ).always(
-                    $.proxy(this.always, this)
+                    this.always
                 );
             }
         },
