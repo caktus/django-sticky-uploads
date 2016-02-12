@@ -59,8 +59,8 @@ var djUp = djUp || jQuery;
         init: function () {
             this.processing = false;
             this.options.url = this.$element.data("uploadUrl");
-            this.$hidden = $(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
-            this.$form = this.$element.parents("form").eq(0);
+            this.$form = this.$element.closest("form");
+            this.$hidden = this.$form.find(":input[type=hidden][name=_" + this.$element.attr("name")  + "]");
             if (this.enabled()) {
                 this.$element.on("change", $.proxy(this.change, this));
                 this.$form.on("submit", $.proxy(this.submit, this));
