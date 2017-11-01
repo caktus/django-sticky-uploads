@@ -2,6 +2,14 @@ Release History
 ========================
 
 
+v0.5.0 (Released 2017-11-01)
+----------------------------
+
+* Add support for Python 3.5, 3.6
+* Drop support for Python 3.2, 3.3
+* Add support for Django 1.10, 1.11
+* Drop support for Django 1.9 and Django older than 1.8
+
 v0.4.0 (Released 2015-06-15)
 -------------------
 

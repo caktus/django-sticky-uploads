@@ -8,7 +8,7 @@ from mock import Mock
 
 class MockStorage(Mock):
 
-    def save(self, name, upload):
+    def save(self, name, upload, max_length=None):
         return name
 
     def url(self, name):

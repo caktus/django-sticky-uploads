@@ -21,7 +21,7 @@ temp directory and should not be exposed by the webserver until the original for
 has had a chance to validate the file.
 
 The serialization used for the stored file references uses the
-`cryptographic signing <https://docs.djangoproject.com/en/1.5/topics/signing/>`_ utilities
+`cryptographic signing <https://docs.djangoproject.com/en/stable/topics/signing/>`_ utilities
 included in Django. This prevents the client from manipulating the value when it is available
 on the client. This relies on keeping your ``SECRET_KEY`` a secret. In the case that your
 ``SECRET_KEY`` is changed it will invalidate any serialized references used by django-sticky-uploads.

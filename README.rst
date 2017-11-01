@@ -13,7 +13,7 @@ which uploads the file in the background and also retains value on form errors.
 Requirements/Installing
 -----------------------------------
 
-django-sticky-uploads requires Python 2.7 or 3.2+. It also requires Django >= 1.4.
+django-sticky-uploads requires Python 2.7 or 3.4+. It also requires Django >= 1.8.
 
 The easiest way to install django-sticky-uploads is using `pip <http://www.pip-installer.org/>`_::
 
@@ -57,12 +57,9 @@ Running the Tests
 
 You can run the tests with via::
 
-    python setup.py test
+    tox
 
-or::
-
-    python runtests.py
-
+(Possibly after installing ``tox`` with ``pip install tox`` or alternative.)
 
 License
 --------------------------------------

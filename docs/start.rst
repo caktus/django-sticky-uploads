@@ -37,8 +37,8 @@ own to ensure the static files are included correctly.
 Including the URLs
 ----------------------------------------------------------------------
 
-django-sticky-uploads includes views for accepting the AJAX file uploads. To
-get working you'll need to include these in your url patterns.
+django-sticky-uploads includes views for accepting the AJAX file uploads.
+You'll need to include these in your url patterns:
 
 .. code-block:: python
 
@@ -97,7 +97,7 @@ ______________________________________________________________________
 
 The Django admin currently ships with jQuery 1.4.2 which makes it too old to use
 the widget. django-sticky-uploads will automatically include the bundled version of
-the plugin when used in the admin so there is no additional files to include to
+the plugin when used in the admin so there are no additional files to include to
 use the widget in the admin.
 
 
@@ -105,7 +105,7 @@ Adding the Widget
 ----------------------------------------------------------------------
 
 The final step to use django-sticky-uploads is to use the widget on an existing
-form with a ``FileField``. The ``StickyUploadWidget`` is drop-in replacement for
+form with a ``FileField``. The ``StickyUploadWidget`` is a drop-in replacement for
 the default ``ClearableFileInput`` and can be used on any Django ``Form`` including
 ``ModelForm``s.
 
@@ -119,7 +119,7 @@ the default ``ClearableFileInput`` and can be used on any Django ``Form`` includ
     class ExampleForm(forms.Form):
         upload = forms.FileField(widget=StickyUploadWidget)
 
-Note that to make use of the background upload, the user must be authenticated so
+Note that to make use of the background upload, the user must be authenticated, so
 the ``StickyUploadWidget`` should only be used on forms/views where the user is
 authenticated.
 

@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django import forms
+from django import forms, VERSION as django_version
 from django.core.urlresolvers import reverse_lazy
 from django.utils.safestring import mark_safe
 
@@ -10,8 +10,8 @@ from .utils import open_stored_file
 
 class StickyUploadWidget(forms.ClearableFileInput):
     """Customize file uploader widget to handle AJAX upload and preserve value."""
-    # template to use when there is no url
-    url_markup_template_tmp = '{1}'
+    # Template name to use with Django 1.11+
+    template_name = 'sticky_upload_widget.html'
 
     class Media(object):
         js = (
@@ -42,22 +42,23 @@ class StickyUploadWidget(forms.ClearableFileInput):
                     setattr(upload, '_seralized_location', value)
         return upload
 
-    def render(self, name, value, attrs=None):
-        """Include a hidden input to stored the serialized upload value."""
+    def render(self, name, value, attrs=None, renderer=None):
+        """Include a hidden input to store the serialized upload value."""
         location = getattr(value, '_seralized_location', '')
         if location and not hasattr(value, 'url'):
             value.url = '#'
             if hasattr(self, 'get_template_substitution_values'):
-                # Django 1.8+
+                # Django 1.8-1.10
                 self.template_with_initial = (
                     '%(initial_text)s: %(initial)s %(clear_template)s'
                     '<br />%(input_text)s: %(input)s')
-            elif hasattr(self, 'url_markup_template'):
-                # Django 1.6-1.7
-                self.url_markup_template = self.url_markup_template_tmp               
         attrs = attrs or {}
         attrs.update({'data-upload-url': self.url})
-        parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
         hidden_name = self.get_hidden_name(name)
-        hidden = forms.HiddenInput().render(hidden_name, location)
-        return mark_safe(parent + hidden)
+        if django_version >= (1, 11):
+            parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs, renderer=renderer)
+            hidden = forms.HiddenInput().render(hidden_name, location, renderer=renderer)
+        else:
+            parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
+            hidden = forms.HiddenInput().render(hidden_name, location)
+        return mark_safe(parent + '\n' + hidden)

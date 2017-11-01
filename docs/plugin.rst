@@ -8,12 +8,12 @@ interactions in the browser.
 Accessing the Plugin
 ----------------------------------------------------------------------
 
-How you access the plugin depends on slightly on how you've included the
-JS. If you are using the bundled version (such as in the admin) then you
+How you access the plugin depends slightly on how you've included the
+JS. If you are using the bundled version (such as in the admin), you
 must use the ``djUp`` namespaced jQuery. If you are using an existing version
-of jQuery then you can use the common ``$`` or ``jQuery``. The examples below
+of jQuery, you can use the common ``$`` or ``jQuery``. The examples below
 will all use ``$``. You can handle these cases by wrapping your code in
-a executing anonymous function such as:
+an executing anonymous function such as:
 
 .. code-block:: javascript
 
@@ -22,7 +22,7 @@ a executing anonymous function such as:
         // Code would go here
     })(djUp);
 
-When the plugin is bound to a file input it is stored in the element's jQuery
+When the plugin is bound to a file input, it is stored in the element's jQuery
 data under the key ``djangoUploader``.
 
 .. code-block:: javascript
@@ -41,16 +41,16 @@ AJAX Hooks
 ----------------------------------------------------------------------
 
 There are 3 hooks for interacting with the plugin in the life cycle of a new
-upload request: ``before``, ``success``, ``failure``. All of these callbacks
-are given the scope of the plugin, that is ``this`` will access the plugin inside
-of the callback. Each of these callbacks are set by assigning them to the
+upload request: ``before``, ``success``, and ``failure``. All of these callbacks
+are given the scope of the plugin. That is, ``this`` will access the plugin inside
+of the callback. Each of these callbacks is set by assigning to the
 ``plugin.options``.
 
 
 ``before``
 ______________________________________________________________________
 
-The ``before`` function, if set, is called one the file input has been changed
+The ``before`` function, if set, is called when the file input has been changed,
 and is passed a single argument which is the file data. You may use this hook 
 to do any validations on the file to be uploaded. If the ``before`` callback 
 returns ``false`` then it will prevent the upload. An example is given below:
@@ -67,8 +67,8 @@ returns ``false`` then it will prevent the upload. An example is given below:
 
 .. note::
 
-    That while this hook can be used to do some basic validations, since they
-    are controlled on the client they can be circumvented by a truly malicious
+    While this hook can be used to do some basic validations, since it
+    is controlled on the client it can be circumvented by a truly malicious
     user. Any validations should be replicated on the server as well. This
     should primarily be used for warnings to the user that data they are about
     to submit is not going to be valid.
@@ -128,10 +128,10 @@ Because the file is being uploaded in the background while the user processes
 the rest of the form, there is a case where the file upload has not completed
 but the user has submitted the form. In this case the default behavior of the
 plugin is to abort upload request and submit the form as normal. This means
-the at least part of the file will have been uploaded twice and the effort
+at least part of the file will have been uploaded twice and the effort
 in the background upload is wasted.
 
-If you chose you can handle this case differently using the ``submit`` callback.
+If you choose, you can handle this case differently using the ``submit`` callback.
 This callback is passed a single argument which is the form submit event. One
 example of using this option is given below:
 
