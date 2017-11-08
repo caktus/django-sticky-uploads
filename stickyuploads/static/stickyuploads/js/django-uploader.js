@@ -183,13 +183,15 @@ var djUp = djUp || jQuery;
             //progress indicator for the uploading file
             var xhr = new XMLHttpRequest(),
                 progressLabel = this.$progress;
-            xhr.upload.addEventListener("progress", function (file) {
-                if (file.lengthComputable) {
-                    var percentLoaded = Math.round((file.loaded / file.total) * 100);
-                    // Increase the progress progress label until 100%
-                    progressLabel.text(percentLoaded + '%');
-                }
-            });
+            if (progressLabel !== undefined) {
+                xhr.upload.addEventListener("progress", function (file) {
+                    if (file.lengthComputable) {
+                        var percentLoaded = Math.round((file.loaded / file.total) * 100);
+                        // Increase the progress progress label until 100%
+                        progressLabel.text(percentLoaded + '%');
+                    }
+                });
+            }
             return xhr;
         }
     };

@@ -11,11 +11,11 @@ from .utils import open_stored_file
 class StickyUploadWidget(forms.ClearableFileInput):
     """Customize file uploader widget to handle AJAX upload and preserve value."""
     # Template name to use with Django 1.11+
-    template_name = 'sticky_upload_widget.html'
+    template_name = 'django/forms/widgets/clearable_file_input.html'
 
     class Media(object):
         js = (
-            'stickyuploads/js/django-uploader.bundle.min.js?v=%s' % __version__,
+            'stickyuploads/js/django-uploader.js',
         )
 
     def __init__(self, *args, **kwargs):
@@ -55,10 +55,11 @@ class StickyUploadWidget(forms.ClearableFileInput):
         attrs = attrs or {}
         attrs.update({'data-upload-url': self.url})
         hidden_name = self.get_hidden_name(name)
+        kwargs = {}
         if django_version >= (1, 11):
-            parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs, renderer=renderer)
-            hidden = forms.HiddenInput().render(hidden_name, location, renderer=renderer)
-        else:
-            parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs)
-            hidden = forms.HiddenInput().render(hidden_name, location)
+            kwargs['renderer'] = renderer
+
+        parent = super(StickyUploadWidget, self).render(name, value, attrs=attrs, **kwargs)
+        hidden = forms.HiddenInput().render(hidden_name, location, **kwargs)
+
         return mark_safe(parent + '\n' + hidden)

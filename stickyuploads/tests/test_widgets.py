@@ -84,15 +84,26 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
     def test_render_with_restored_file(self):
         """Render with File which has been restored."""
         with open(self.temp_name) as temp:
-            currently_html = 'Currently: {0} '.format(self.temp_name)
+            if django.VERSION >= (1, 11):
+                # The widget markup changed in Django 1.11
+                expected_html = (
+                    'Currently: <a href="#">{0}</a>\n'
+                    '<input type="checkbox" name="myfile-clear" id="myfile-clear_id" />\n'
+                    '<label for="myfile-clear_id">Clear</label><br />\n'
+                    'Change:\n'
+                    '<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />\n'
+                    '<input type="hidden" name="_myfile" value="1234" />').format(self.temp_name)
+            else:
+                expected_html = (
+                    'Currently: {0} ' +
+                    '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
+                    '<label for="myfile-clear_id"> Clear</label><br />' +
+                    'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+                    '<input type="hidden" name="_myfile" value="1234" />').format(self.temp_name)
+
             value = File(temp)
             setattr(value, '_seralized_location', '1234')
-            self.assertHTMLEqual(self.widget.render('myfile', value),
-                currently_html +
-                '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
-                '<label for="myfile-clear_id"> Clear</label><br />' +
-                'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
-                '<input type="hidden" name="_myfile" value="1234" />')
+            self.assertHTMLEqual(self.widget.render('myfile', value), expected_html)
 
     def test_value_from_files(self):
         """Get uploaded file from the FILES as normal."""

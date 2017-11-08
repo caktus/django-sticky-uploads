@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect

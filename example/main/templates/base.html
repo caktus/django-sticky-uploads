@@ -12,6 +12,6 @@
         {% endblock %}
     </div>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.js' %}"></script>
+    {% if form %}{{ form.media }}{% endif %}
 </body>
 </html>

@@ -2,15 +2,11 @@ from __future__ import unicode_literals
 
 import os
 import json
-import shutil
-import tempfile
 
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from ..compat import get_user_model
-from ..storage import TempFileSystemStorage
-from ..utils import serialize_upload
 from .base import TempFileMixin
 
 
