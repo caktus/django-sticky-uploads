@@ -2,7 +2,7 @@ Customizing the Server Side
 ================================================
 
 django-sticky-uploads ships with a default view for handling the background file
-uploads but you may need or want to customize the behavior such as where files
+uploads, but you may need or want to customize the behavior such as where files
 are stored or which users are allowed to upload files.
 
 

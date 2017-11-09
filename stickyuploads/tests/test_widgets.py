@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import django
+from django import forms
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -24,6 +25,36 @@ class FakeFieldFile(object):
 
     def __str__(self):
         return self.url
+
+
+class ClearableFileInputWidgetTestCase(TempFileMixin, SimpleTestCase):
+    """
+    Make sure the widget we're subclassing doesn't change its behavior across Django versions, etc.
+    """
+
+    def setUp(self):
+        super(ClearableFileInputWidgetTestCase, self).setUp()
+        self.widget = forms.ClearableFileInput()
+        self.url = reverse('sticky-upload-default')
+
+    def test_render(self):
+        """Default render of the widget without any value."""
+        actual_html = self.widget.render('myfile', None)
+        expected_html = '<input name="myfile" type="file" />'
+        self.assertHTMLEqual(expected_html, actual_html)
+
+    def test_render_with_initial(self):
+        """Render with standard FieldFile."""
+        value = FakeFieldFile()
+        expected_html = '''Currently: <a href="something">something</a> <input id="myfile-clear_id" name="myfile-clear" type="checkbox" /> <label for="myfile-clear_id">Clear</label><br />Change: <input name="myfile" type="file" />'''
+        actual_html = self.widget.render('myfile', value)
+        self.assertHTMLEqual(expected_html, actual_html)
+
+    def test_value_from_files(self):
+        """Get uploaded file from the FILES as normal."""
+        f = SimpleUploadedFile('something.txt', b'content')
+        value = self.widget.value_from_datadict(data={}, files={'myfile': f}, name='myfile')
+        self.assertEqual(value, f)
 
 
 class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
@@ -53,19 +84,26 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
     def test_render_with_restored_file(self):
         """Render with File which has been restored."""
         with open(self.temp_name) as temp:
-            currently_html = 'Currently: {0} '.format(self.temp_name)
-            #Django does not allow overriding url_markup_template before 1.6
-            # remove when 1.4, 1.5 support is dropped
-            if django.VERSION < (1, 6):
-                currently_html = 'Currently: <a href="#">{0}</a> '.format(self.temp_name)
+            if django.VERSION >= (1, 11):
+                # The widget markup changed in Django 1.11
+                expected_html = (
+                    'Currently: <a href="#">{0}</a>\n'
+                    '<input type="checkbox" name="myfile-clear" id="myfile-clear_id" />\n'
+                    '<label for="myfile-clear_id">Clear</label><br />\n'
+                    'Change:\n'
+                    '<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />\n'
+                    '<input type="hidden" name="_myfile" value="1234" />').format(self.temp_name)
+            else:
+                expected_html = (
+                    'Currently: {0} ' +
+                    '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
+                    '<label for="myfile-clear_id"> Clear</label><br />' +
+                    'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
+                    '<input type="hidden" name="_myfile" value="1234" />').format(self.temp_name)
+
             value = File(temp)
             setattr(value, '_seralized_location', '1234')
-            self.assertHTMLEqual(self.widget.render('myfile', value),
-                currently_html +
-                '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
-                '<label for="myfile-clear_id"> Clear</label><br />' +
-                'Change:<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
-                '<input type="hidden" name="_myfile" value="1234" />')
+            self.assertHTMLEqual(self.widget.render('myfile', value), expected_html)
 
     def test_value_from_files(self):
         """Get uploaded file from the FILES as normal."""

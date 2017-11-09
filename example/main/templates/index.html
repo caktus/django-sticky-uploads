@@ -3,9 +3,12 @@
 {% block content %}
     <h1>Django Sticky Uploads Example</h1>
     <p class="description">
-        Use the below for to test the background upload functionality of django-sticky-uploads.
-        If the file was successfully uploaded in the background it should persist even if you do not
-        include the required name.
+        Use the form below to test the background upload functionality of django-sticky-uploads.
+        If the file was successfully uploaded in the background, it should persist on a submission
+        error, even if you do not include the required name on subsequent submissions.
+    </p>
+    <p>
+      You can simulate a failed form submission by unchecking the checkbox before submitting.
     </p>
     {% if messages %}
         {% for message in messages %}
