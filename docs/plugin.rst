@@ -1,50 +1,44 @@
 Customizing the Client Side
 ================================================
 
-The jQuery plugin has a number of hooks to add additional validation or
+The uploader has a number of hooks to add additional validation or
 interactions in the browser.
 
 
-Accessing the Plugin
+Accessing the uploader
 ----------------------------------------------------------------------
 
-How you access the plugin depends slightly on how you've included the
-JS. If you are using the bundled version (such as in the admin), you
-must use the ``djUp`` namespaced jQuery. If you are using an existing version
-of jQuery, you can use the common ``$`` or ``jQuery``. The examples below
-will all use ``$``. You can handle these cases by wrapping your code in
-an executing anonymous function such as:
+When the uploader is bound to a file input, it is stored on the element as
+a property named ``djangoUploader`` during django-stick-uploads' initialization.
 
 .. code-block:: javascript
 
-    var djUp = djUp || jQuery;
-    (function ($) {
-        // Code would go here
-    })(djUp);
+    var myfield = document.querySelector('input[type=file]#some_id');
+    var uploader = myfield.djangoUploader;
 
-When the plugin is bound to a file input, it is stored in the element's jQuery
-data under the key ``djangoUploader``.
+The django-sticky-uploads initialization happens
+after the DOM has been loaded. A good way to run your own code after that is to load your own
+code after django-sticky-uploads, and arrange for it also to run after the DOM
+has been loaded; it should then run after django-sticky-uploads.
 
-.. code-block:: javascript
-
-    var plugin = $('#myfield').data('djangoUploader');
-
-You can then check whether the plugin is enabled for the current browser with
+You can check whether the uploader is enabled for the current browser with
 the ``enabled`` function.
 
 .. code-block:: javascript
 
-    console.log(plugin.enabled());
+    console.log(uploader.enabled());
 
+(Being "enabled" means the current browser supports the standard features
+for uploading files that django-sticky-uploads needs.)
 
 AJAX Hooks
 ----------------------------------------------------------------------
 
-There are 3 hooks for interacting with the plugin in the life cycle of a new
+There are 3 hooks for interacting with the uploader in the life cycle of a new
 upload request: ``before``, ``success``, and ``failure``. All of these callbacks
-are given the scope of the plugin. That is, ``this`` will access the plugin inside
-of the callback. Each of these callbacks is set by assigning to the
-``plugin.options``.
+are given the scope of the uploader. That is, ``this`` will access the uploader inside
+of the callback. Each of these callbacks is set by assigning to
+``uploader.options``.
 
 
 ``before``
@@ -53,12 +47,12 @@ ______________________________________________________________________
 The ``before`` function, if set, is called when the file input has been changed,
 and is passed a single argument which is the file data. You may use this hook 
 to do any validations on the file to be uploaded. If the ``before`` callback 
-returns ``false`` then it will prevent the upload. An example is given below:
+returns ``false``, it will prevent the upload. An example is given below:
 
 .. code-block:: javascript
 
-    var plugin = $('#myfield').data('djangoUploader');
-    plugin.options.before = function (file) {
+    var uploader = myfield.djangoUploader;
+    uploader.options.before = function (file) {
         if (file.size > 1024 * 1024 * 2) {
             // This file is too big
             return false;
@@ -78,7 +72,7 @@ returns ``false`` then it will prevent the upload. An example is given below:
 ______________________________________________________________________
 
 The ``success`` callback is called when the server has completed a successful
-upload. Successful in the case means that the server gave a 20X response which
+upload. Successful in this case means that the server gave a 2XX response which
 could include the case where the server did not validate the file which was
 uploaded. A successful server response will contain the following info:
 
@@ -96,8 +90,8 @@ other processing. The other keys are not included when the upload is not valid.
 
 .. code-block:: javascript
 
-    var plugin = $('#myfield').data('djangoUploader');
-    plugin.options.success = function (response) {
+    var uploader = myfield.djangoUploader;
+    uploader.options.success = function (response) {
         if (response.is_valid) {
             // Do something
         } else {
@@ -109,14 +103,14 @@ other processing. The other keys are not included when the upload is not valid.
 ``failure``
 ______________________________________________________________________
 
-The ``failure`` callback is called when the server has returned a 40X or 50X
+The ``failure`` callback is called when the server has returned a 4XX or 5XX
 response. This might be caused by the user not having permission to do the upload
 or a server timeout. The callback is given the server response.
 
 .. code-block:: javascript
 
-    var plugin = $('#myfield').data('djangoUploader');
-    plugin.options.failure = function (response) {
+    var uploader = myfield.djangoUploader;
+    uploader.options.failure = function (response) {
         // Do something
     };
 
@@ -137,19 +131,20 @@ example of using this option is given below:
 
 .. code-block:: javascript
 
-    var plugin = $('#myfield').data('djangoUploader');
-    plugin.options.submit = function (event) {
+    var uploader = myfield.djangoUploader;
+    uploader.options.submit = function (event) {
         var self = this, callback;
         if (this.processing) {
             // Prevent submission
             event.preventDefault();
+            var form = event.target;
             callback = function () {
                 if (self.processing) {
                     // Wait 500 milliseconds and try again
                     setTimeout(callback, 500);
                 } else {
                     // Done processing so submit the form
-                    self.$form.submit();
+                    form.submit();
                 }
             };
             // Wait 500 milliseconds and try again

@@ -2,6 +2,13 @@ Release History
 ========================
 
 
+v0.6.0 (Released 2017-11-14)
+----------------------------
+
+* Remove dependency on jQuery.
+* *Backwards Incompatible*: there are changes to the interface for customizing how the uploads work.
+  See docs/plugin.rst.
+
 v0.5.0 (Released 2017-11-01)
 ----------------------------
 

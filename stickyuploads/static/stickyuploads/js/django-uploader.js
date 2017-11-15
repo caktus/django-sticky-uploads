@@ -3,15 +3,20 @@
  * Source: https://github.com/caktus/django-sticky-uploads
  * Docs: http://django-sticky-uploads.readthedocs.org/
  *
- * Depends:
- *   - jQuery 1.7+
  *
- * Copyright 2013, Caktus Consulting Group, LLC
+ * Copyright 2013-2017, Caktus Consulting Group, LLC
  * BSD License
  *
 */
-var djUp = djUp || jQuery;
-(function ($, window, document, undefined) {
+
+/* Polyfill for Element.matches (https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) */
+if (!Element.prototype.matches) {
+    Element.prototype.matches =
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+}
+
+(function (window, document, undefined) {
     "use strict";
     var pluginName = "djangoUploader",
         defaults = {
@@ -23,10 +28,7 @@ var djUp = djUp || jQuery;
             csrfCookieName: "csrftoken"
         };
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
+    const DONE = 4;
 
     function getCookie(name) {
         var cookieValue = null,
@@ -34,7 +36,7 @@ var djUp = djUp || jQuery;
         if (document.cookie && document.cookie !== "") {
             cookies = document.cookie.split(";");
             for (i = 0; i < cookies.length; i++) {
-                cookie = $.trim(cookies[i]);
+                cookie = cookies[i].trim();
                 // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) === (name + "=")) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -45,10 +47,29 @@ var djUp = djUp || jQuery;
         return cookieValue;
     }
 
+    // Some helpers, similar to features of jQuery
+    function closest(elt, selector) {
+        if (elt.matches(selector)) {
+            return elt;
+        }
+        var parent = elt.parentElement;
+        if (parent !== null) {
+            return closest(parent, selector);
+        }
+        return undefined;
+    }
+
+    function insertAfter(elt_to_insert, elt_to_insert_it_after) {
+        var parent = elt_to_insert_it_after.parentElement;
+        // insert before the node we really want to insert after
+        parent.insertBefore(elt_to_insert, elt_to_insert_it_after);
+        // then swap them
+        parent.insertBefore(elt_to_insert_it_after, elt_to_insert);
+    }
+
     function DjangoUploader(element, options) {
         this.element = element;
-        this.$element = $(element);
-        this.options = $.extend({}, defaults, options);
+        this.options = Object.assign({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
         this.init();
@@ -58,14 +79,16 @@ var djUp = djUp || jQuery;
 
         init: function () {
             this.processing = false;
-            this.options.url = this.$element.data("uploadUrl");
-            this.$form = this.$element.closest("form");
-            this.$hidden = this.$form.find("input[type=hidden][name=_" + this.$element.attr("name")  + "]");
+            this.options.url = this.element.getAttribute("data-upload-url");
+            this.form = closest(this.element, "form");
+            var hidden_selector = "input[type=hidden][name=_" + this.element.getAttribute("name")  + "]";
+            this.hidden = this.form.querySelectorAll(hidden_selector)[0];
             if (this.enabled()) {
-                this.$element.on("change", $.proxy(this.change, this));
-                this.$form.on("submit", $.proxy(this.submit, this));
-                this.$progress = $("<span>").addClass("progress-label");
-                this.$element.after(this.$progress);
+                this.element.addEventListener("change", this.change.bind(this));
+                this.form.addEventListener("submit", this.submit.bind(this));
+                this.progress = document.createElement('span');
+                this.progress.setAttribute('class', 'progress-label');
+                insertAfter(this.progress, this.element);
             }
         },
 
@@ -76,62 +99,66 @@ var djUp = djUp || jQuery;
                 return;
             }
             file = this.element.files[0];
-            if (this.before(file) !== false) {
-                formData.append("upload", file);
-                this.abort();
-                this.processing = $.ajax({
-                    url: this.options.url,
-                    type: "POST",
-                    data: formData,
-                    crossDomain: false,
-                    context: this,
-                    beforeSend: this._add_csrf_header,
-                    processData: false,
-                    contentType: false,
-                    xhr: this.xhr
-                }).done(
-                    this.done
-                ).fail(
-                    this.fail
-                ).always(
-                    this.always
-                );
-            }
-        },
-
-        before: function (file) {
-            // Runs before the AJAX call.
-            // Returning false will abort the call.
-            var result = true;
             if (this.options.before) {
-                result = this.options.before.apply(this, [file]);
+                if (!this.options.before.apply(this, [file])) {
+                    return;
+                }
             }
-            return result;
+            formData.append("upload", file);
+            this.abort();
+            this.start_upload(formData);
         },
 
-        always: function (response) {
-            // Runs after the AJAX call regardless of success or failure.
-            this.processing = false;
-        },
-
-        done: function (response) {
-            // Runs on a successful (200) response
-            if (response.is_valid && response.stored) {
-                this.$hidden.val(response.stored);
-            } else {
-                this.$hidden.val("");
-            }
-            if (this.options.success) {
-                this.options.success.apply(this, [response]);
+        onProgress: function(evt) {
+            if (evt.lengthComputable) {
+                var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+                // Increase the progress progress label until 100%
+                this.progress.textContent = percentLoaded + '%';
             }
         },
 
-        fail: function (response) {
-            // Runs on a error (40X-50X) response
-            this.$hidden.val("");
-            if (this.options.failure) {
-                this.options.failure.apply(this, [response]);
+        onReadyStateChange: function() {
+            const xhr = this.xhr;
+
+            if (xhr.readyState === DONE) {
+                const response = JSON.parse(xhr.response);
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Runs on a successful (2XX) response
+                    if (response.is_valid && response.stored) {
+                        // hidden is an input element https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement
+                        this.hidden.value = response.stored;
+                    } else {
+                        this.hidden.value = "";
+                    }
+                    if (this.options.success) {
+                        this.options.success.apply(this, [response]);
+                    }
+                }
+                else if (xhr.status >= 400 && xhr.status < 600) {
+                    // Runs on an error (4XX-5XX) response
+                    this.hidden.value = "";
+                    if (this.options.failure) {
+                        this.options.failure.apply(this, [response]);
+                    }
+                }
+                this.processing = false;
+                this.xhr = undefined;
+                this.progress.textContent = '';
+
             }
+        },
+
+        start_upload: function(formData) {
+            const xhr = new XMLHttpRequest();
+            this.xhr = xhr;
+            xhr.onreadystatechange = this.onReadyStateChange.bind(this);
+            xhr.upload.addEventListener("progress", this.onProgress.bind(this));
+            this.progress.textContent = "Uploading...";
+
+            xhr.open("POST", this.options.url, true);
+            xhr.setRequestHeader("X-CSRFToken", getCookie(this.options.csrfCookieName));
+            xhr.send(formData);
         },
 
         submit: function (event) {
@@ -143,16 +170,18 @@ var djUp = djUp || jQuery;
                 this.abort();
             }
 
-            if (this.$hidden.val()) {
+            if (this.hidden.value) {
                 // Don't submit the file since its already on the server
-                this.$element.prop("disabled", true);
+                this.element.disabled = true;
             }
         },
 
         abort: function () {
             // Abort the current upload if any
             if (this.processing) {
-                this.processing.abort();
+                this.xhr.abort();
+                this.processing = false;
+                this.xhr = undefined;
             }
         },
 
@@ -170,43 +199,25 @@ var djUp = djUp || jQuery;
             return xhr2 && fileApi;
         },
 
-        
-        _add_csrf_header: function (xhr, settings) {
-            var csrftoken = "";
-            if (!csrfSafeMethod(settings.type)) {
-                csrftoken = getCookie(this.options.csrfCookieName);
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
-
-        xhr: function(){
-            //progress indicator for the uploading file
-            var xhr = new XMLHttpRequest(),
-                progressLabel = this.$progress;
-            if (progressLabel !== undefined) {
-                xhr.upload.addEventListener("progress", function (file) {
-                    if (file.lengthComputable) {
-                        var percentLoaded = Math.round((file.loaded / file.total) * 100);
-                        // Increase the progress progress label until 100%
-                        progressLabel.text(percentLoaded + '%');
-                    }
-                });
-            }
-            return xhr;
-        }
     };
 
-    $.fn[pluginName] = function (options) {
-        return this.each(function () {
-            if (!$.data(this, pluginName)) {
-                $.data(this, pluginName, new DjangoUploader(this, options));
-            }
-        });
-    };
-
-    $(document).ready(function () {
+    function init_sticky_uploads() {
         // Auto-bind file inputs with data-upload-url attributes
-        $(":input[type=file][data-upload-url]").djangoUploader();
-    });
+        var i, inputs = document.querySelectorAll("input[type=file][data-upload-url]");
+        for (i=0; i < inputs.length; i++) {
+            // For each input field, create an uploader object, and stash it
+            // as a property so it can be accessed later.
+            inputs[i].djangoUploader = new DjangoUploader(inputs[i]);
+        }
+    }
 
-})(djUp, window, document);
+    // Run setup when ready.
+    if (document.readyState === 'loading') {
+        // Run when loading is done
+        document.addEventListener('DOMContentLoaded', init_sticky_uploads);
+    } else {
+        // It's already loaded, we can run now.
+        init_sticky_uploads();
+    }
+
+})(window, document);

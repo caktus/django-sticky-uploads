@@ -11,7 +11,9 @@
         {% block content %}
         {% endblock %}
     </div>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     {% if form %}{{ form.media }}{% endif %}
+
+{% block the_very_end %}
+{% endblock %}
 </body>
 </html>
