@@ -22,3 +22,37 @@
         <div class="clear"></div>
     </form>
 {% endblock %}
+
+{% block the_very_end %}
+  <script>
+  // This needs to be at the very end of the page body so it'll run after
+  // django-sticky-uploads has initialized.
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Now index.html's init code is running");
+
+            var elt = document.querySelector('input[type=file]');
+            var uploader = elt.djangoUploader;
+
+            uploader.options.before = function(file) {
+                console.log("Before is running");
+                console.log("Length of data is " + file.size);
+                return true;
+            }
+
+            uploader.options.success = function(response) {
+                console.log("Success is running");
+                console.log(response);
+            }
+
+            uploader.options.failure = function(response) {
+                console.log("Failure is running");
+                console.log(response);
+            }
+
+            uploader.options.submit = function(evt) {
+                console.log("This is the submit callback")
+            }
+        });
+
+  </script>
+{% endblock %}

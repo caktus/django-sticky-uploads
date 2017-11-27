@@ -57,48 +57,25 @@ change it to suit your own needs.
 Including the JS
 ----------------------------------------------------------------------
 
-The enhanced upload widget requires a small piece of JS to handle the background
-upload. This is a simple jQuery plugin which requires jQuery 1.7+ or higher. Depending
-on your project you may wish to use a fully bundled version of the plugin or simply
-include the plugin itself. Each of the cases assume that you are using ``contrib.staticfiles``
+The enhanced upload widget requires a small piece of JavaScript to handle the background
+upload. Each of the cases assume that you are using ``contrib.staticfiles``
 to manage static dependencies.
 
-
-Already using jQuery 1.7+
-______________________________________________________________________
-
-If you have already included jQuery 1.7+ in your project then you can use the
-minified plugin code without the included jQuery. To include this you should
-add the following script tag to any page which will use the widget.
+First, you can add the following script tag to any page which will use the widget.
 
 .. code-block:: html
     
     {% load static from staticfiles %}
-    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.js' %}"></script>
 
+Alternatively, you can minimize the JavaScript and load that, or bundle it with other JavaScript
+for the page.
 
-No jQuery or jQuery < 1.7
-______________________________________________________________________
-
-If your project does not include jQuery or you are currently using a version of
-jQuery older than 1.7 you can still use django-sticky-uploads by including a bundled
-version of the plugin code.
-
-.. code-block:: html
-    
-    {% load static from staticfiles %}
-    <script type="text/javascript" src="{% static 'stickyuploads/js/django-uploader.bundle.min.js' %}"></script>
-
-This version includes the plugin code as well as jQuery v1.11.1 together.
-
-
-In the Django Admin
-______________________________________________________________________
-
-The Django admin currently ships with jQuery 1.4.2 which makes it too old to use
-the widget. django-sticky-uploads will automatically include the bundled version of
-the plugin when used in the admin so there are no additional files to include to
-use the widget in the admin.
+Yet another option is to include ``{{ form.media }}``, where ``form`` is whatever form
+is using the upload widget. The widget includes an
+`inner Media class <https://docs.djangoproject.com/en/stable/topics/forms/media/>`_
+that lists ``'stickyuploads/js/django-uploader.js'`` as a dependency, and including
+``{{ form.media }}`` in the template will produce the necessary markup to load it.
 
 
 Adding the Widget
