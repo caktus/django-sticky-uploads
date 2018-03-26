@@ -5,7 +5,11 @@ from django import forms
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
+try:
+    # Older django versions
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 from django.test import SimpleTestCase
 from django.utils.encoding import python_2_unicode_compatible
 

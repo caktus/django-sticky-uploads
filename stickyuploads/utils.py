@@ -8,6 +8,13 @@ from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
 
 
+def is_authenticated(user):
+    if callable(user.is_authenticated):
+        # Older django versions
+        return user.is_authenticated()
+    return user.is_authenticated
+
+
 def serialize_upload(name, storage, url):
     """
     Serialize uploaded file by name and storage. Namespaced by the upload url.

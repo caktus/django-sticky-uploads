@@ -1,6 +1,10 @@
 Release History
 ========================
 
+v0.7.0 (unreleased)
+-------------------
+
+* Add support for Django 2.0 (Python 3 only)
 
 v0.6.1 (Released 2017-11-27)
 ----------------------------

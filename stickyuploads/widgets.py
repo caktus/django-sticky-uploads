@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
 
 from django import forms, VERSION as django_version
-from django.core.urlresolvers import reverse_lazy
+try:
+    # Older django versions
+    from django.core.urlresolvers import reverse_lazy
+except ImportError:
+    from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 
-from . import __version__
 from .utils import open_stored_file
 
 

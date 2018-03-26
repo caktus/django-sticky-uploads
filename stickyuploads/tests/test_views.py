@@ -4,7 +4,11 @@ import os
 import json
 
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+try:
+    # Older django versions
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 from django.test import TestCase
 
 from .base import TempFileMixin

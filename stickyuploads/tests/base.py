@@ -2,13 +2,19 @@
 
 import shutil
 import tempfile
+try:
+    from django.utils.six import string_types, text_type
+except ImportError:
+    # Too new, no six, must be python 3
+    string_types = [str]
+    text_type = str
 
 from mock import Mock
 
 
 class MockStorage(Mock):
 
-    def save(self, name, upload, max_length=None):
+    def save(self, name, content, max_length=None):
         return name
 
     def url(self, name):
@@ -16,6 +22,9 @@ class MockStorage(Mock):
 
     def get_valid_name(self, name):
         return name
+
+    def generate_filename(self, thing):
+        return text_type(thing)
 
 
 mockstorage = MockStorage()
