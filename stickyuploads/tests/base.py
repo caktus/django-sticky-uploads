@@ -2,6 +2,9 @@
 
 import shutil
 import tempfile
+
+from django.db import models
+
 try:
     from django.utils.six import string_types, text_type
 except ImportError:
@@ -42,3 +45,8 @@ class TempFileMixin(object):
     def tearDown(self):
         super(TempFileMixin, self).tearDown()
         shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+
+class Example(models.Model):
+    name = models.CharField(max_length=100)
+    upload = models.FileField(storage=mockstorage, upload_to='test/')

@@ -6,15 +6,11 @@ from django import forms
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, SimpleTestCase
-try:
-    # Older django versions
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse
+from django.urls import reverse
 
 from ..utils import serialize_upload
 from ..widgets import StickyUploadWidget
-from . import Example
+from stickyuploads.tests.base import Example
 from .base import TempFileMixin
 
 

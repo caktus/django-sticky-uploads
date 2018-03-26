@@ -6,7 +6,6 @@ from django.core.files.storage import get_storage_class
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.generic import View
 
-from stickyuploads.utils import is_authenticated
 from .forms import UploadForm
 
 
@@ -41,7 +40,7 @@ class UploadView(View):
 
     def upload_allowed(self):
         """Check if the current request is allowed to upload files."""
-        return is_authenticated(self.request.user)
+        return self.request.user.is_authenticated
 
     def get_upload_form(self):
         """Construct form for accepting file upload."""

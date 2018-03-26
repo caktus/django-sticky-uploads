@@ -5,6 +5,8 @@ v0.7.0 (unreleased)
 -------------------
 
 * Add support for Django 2.0 (Python 3 only)
+* Drop support for Django 1.8 and 1.10.
+* Result: support for Django 1.11 and 2.0
 
 v0.6.1 (Released 2017-11-27)
 ----------------------------
