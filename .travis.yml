@@ -23,7 +23,7 @@ script:
 matrix:
   include:
   - python: 2.7
-    env: TOXENV=py27-1.11X,docs,flake8
+    env: TOXENV=py27-1.11.X,docs,flake8
   - python: 3.4
     env: TOXENV=py34-2.0.X,py34-1.11.X
   - python: 3.6
