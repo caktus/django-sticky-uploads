@@ -1,7 +1,7 @@
 Release History
 ========================
 
-v0.7.0 (unreleased)
+v1.0.0 (unreleased)
 -------------------
 
 * Add support for Django 2.0 (Python 3 only)
@@ -29,7 +29,7 @@ v0.5.0 (Released 2017-11-01)
 * Drop support for Django 1.9 and Django older than 1.8
 
 v0.4.0 (Released 2015-06-15)
--------------------
+----------------------------
 
 * Do not display link for temporary uploads (supported on Django 1.6+)
 * Dropped testing support for Python 2.6
