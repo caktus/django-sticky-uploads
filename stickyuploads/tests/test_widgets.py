@@ -5,8 +5,8 @@ from django import forms
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
 from django.test import SimpleTestCase
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 
 from ..utils import serialize_upload
@@ -46,7 +46,9 @@ class ClearableFileInputWidgetTestCase(TempFileMixin, SimpleTestCase):
     def test_render_with_initial(self):
         """Render with standard FieldFile."""
         value = FakeFieldFile()
-        expected_html = '''Currently: <a href="something">something</a> <input id="myfile-clear_id" name="myfile-clear" type="checkbox" /> <label for="myfile-clear_id">Clear</label><br />Change: <input name="myfile" type="file" />'''
+        expected_html = '''Currently: <a href="something">something</a> <input id="myfile-clear_id" ''' \
+            '''name="myfile-clear" type="checkbox" /> <label for="myfile-clear_id">Clear</label>''' \
+            '''<br />Change: <input name="myfile" type="file" />'''
         actual_html = self.widget.render('myfile', value)
         self.assertHTMLEqual(expected_html, actual_html)
 
@@ -67,14 +69,16 @@ class StickyUploadWidgetTestCase(TempFileMixin, SimpleTestCase):
 
     def test_render(self):
         """Default render of the widget without any value."""
-        self.assertHTMLEqual(self.widget.render('myfile', None),
+        self.assertHTMLEqual(
+            self.widget.render('myfile', None),
             '<input type="file" name="myfile" data-upload-url="/sticky-uploads/default/" />' +
             '<input type="hidden" name="_myfile" />')
 
     def test_render_with_initial(self):
         """Render with standard FieldFile."""
         value = FakeFieldFile()
-        self.assertHTMLEqual(self.widget.render('myfile', value),
+        self.assertHTMLEqual(
+            self.widget.render('myfile', value),
             'Currently: <a href="something">something</a> ' +
             '<input id="myfile-clear_id" name="myfile-clear" type="checkbox" />' +
             '<label for="myfile-clear_id"> Clear</label><br />' +

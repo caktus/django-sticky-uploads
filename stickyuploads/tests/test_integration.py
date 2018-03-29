@@ -5,13 +5,13 @@ from django import forms
 
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
 from django.test import TestCase, SimpleTestCase
+from django.urls import reverse
 
 from ..utils import serialize_upload
 from ..widgets import StickyUploadWidget
-from . import Example
-from .base import TempFileMixin, mockstorage
+from stickyuploads.tests.base import Example
+from .base import TempFileMixin
 
 
 class TestForm(forms.Form):
@@ -53,7 +53,6 @@ class FormIntegrationMixin(object):
             data = {'name': '', '_upload': stored}
             form = self.form_class(data=data, files={})
             self.assertFalse(form.is_valid())
-            expected = 'value="{0}"'.format(stored)
             self.assertIn(stored, form.as_p())
 
 

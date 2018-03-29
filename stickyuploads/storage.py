@@ -23,8 +23,4 @@ class TempFileSystemStorage(FileSystemStorage):
             os.path.basename(name),
         )
         method = super(TempFileSystemStorage, self).get_available_name
-        try:
-            return method(name, max_length=max_length)
-        except TypeError:
-            # Django < 1.8
-            return method(name)
+        return method(name, max_length=max_length)

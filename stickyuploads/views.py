@@ -40,7 +40,7 @@ class UploadView(View):
 
     def upload_allowed(self):
         """Check if the current request is allowed to upload files."""
-        return self.request.user.is_authenticated()
+        return self.request.user.is_authenticated
 
     def get_upload_form(self):
         """Construct form for accepting file upload."""

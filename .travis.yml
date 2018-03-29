@@ -13,6 +13,7 @@ addons:
     packages:
     - python2.7
     - python3.4
+    - python3.5
     - python3.6
 
 language: python
@@ -25,10 +26,9 @@ python:
 # Run each Django version in a separate test, that's the mostly likely
 # way failures will break down.
 env:
-  - TOXENV=py27-1.8.X,py34-1.8.X,py36-1.8.X
-  - TOXENV=py27-1.10.X,py34-1.10.X,py36-1.10.X
-  - TOXENV=py27-1.11.X,py34-1.11.X,py36-1.11.X
-  - TOXENV=docs
+  - TOXENV=py27-1.11.X,py34-1.11.X,py35-1.11.X,py36-1.11.X
+  - TOXENV=py34-2.0.X,py35-2.0.X,py36-2.0.X
+  - TOXENV=docs,flake8
 
 install:
   - pip install "tox>=1.8,<2.0"

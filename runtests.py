@@ -3,6 +3,7 @@ import sys
 
 import django
 from django.conf import settings
+from django.test.utils import get_runner
 
 
 if not settings.configured:
@@ -13,7 +14,7 @@ if not settings.configured:
                 'NAME': ':memory:',
             }
         },
-        MIDDLEWARE_CLASSES=(
+        MIDDLEWARE=(
             'django.middleware.common.CommonMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.middleware.csrf.CsrfViewMiddleware',
@@ -33,9 +34,6 @@ if not settings.configured:
         django.setup()
 
 
-from django.test.utils import get_runner
-
-
 def runtests():
     if hasattr(django, 'setup'):
         django.setup()
@@ -47,4 +45,3 @@ def runtests():
 
 if __name__ == '__main__':
     runtests()
-

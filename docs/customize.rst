@@ -76,7 +76,7 @@ the widget.
 .. code-block:: python
 
     from django import forms
-    from django.core.urlresolvers import reverse_lazy
+    from django.urls import reverse_lazy
 
     from stickyuploads.widgets import StickyUploadWidget
 
